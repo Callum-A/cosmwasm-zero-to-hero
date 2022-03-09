@@ -136,3 +136,5 @@ cargo wasm
 ```
 
 We are now setup, so open this folder in your preferred text editor and we'll move on to the next section!
+
+The code for this section is available under the `code` directory. This will be standard for chapters going forward.
