@@ -232,8 +232,11 @@ fn execute_vote(
             let position = poll
                 .options
                 .iter()
-                .position(|option| option.0 == vote)
-                .unwrap();
+                .position(|option| option.0 == vote);
+            if position.is_none() {
+                return Err(ContractError::Unauthorized {});
+            }
+            let position = position.unwrap();
             poll.options[position].1 += 1;
         },
         None => Err(ContractError::Unauthorized {}), // The poll does not exist so we just error
@@ -290,8 +293,11 @@ fn execute_vote(
             let position = poll
                 .options
                 .iter()
-                .position(|option| option.0 == vote)
-                .unwrap();
+                .position(|option| option.0 == vote);
+            if position.is_none() {
+                return Err(ContractError::Unauthorized {});
+            }
+            let position = position.unwrap();
             poll.options[position].1 += 1;
 
             // Save the update
