@@ -3,6 +3,8 @@
 **/target
 /artifacts
 **/artifacts
+**/node_modules
+**/.next
 # Cargo+Git helper file (https://github.com/rust-lang/cargo/blob/0.44.1/src/cargo/sources/git/utils.rs#L320-L327)
 .cargo-ok
 
