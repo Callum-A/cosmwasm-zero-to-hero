@@ -223,6 +223,19 @@ fn query_vote(deps: Deps, env: Env, address: String, poll_id: String) -> StdResu
 
 And there we have it our last query function implemented.
 
+Let's add it to our `query` function:
+
+```rust
+#[cfg_attr(not(feature = "library"), entry_point)]
+pub fn query(deps: Deps, env: Env, msg: QueryMsg) -> StdResult<Binary> {
+    match msg {
+        QueryMsg::AllPolls {} => query_all_polls(deps, env),
+        QueryMsg::Poll { poll_id } => query_poll(deps, env, poll_id),
+        QueryMsg::Vote { address, poll_id } => query_vote(deps, env, address, poll_id),
+    }
+}
+```
+
 Next chapter we will test these functions individually. For now we're done!
 
 ## Follow Up Exercises

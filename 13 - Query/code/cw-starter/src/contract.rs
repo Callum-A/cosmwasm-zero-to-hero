@@ -139,7 +139,7 @@ pub fn query(deps: Deps, env: Env, msg: QueryMsg) -> StdResult<Binary> {
     match msg {
         QueryMsg::AllPolls {} => query_all_polls(deps, env),
         QueryMsg::Poll { poll_id } => query_poll(deps, env, poll_id),
-        QueryMsg::Vote { address, poll_id } => unimplemented!(),
+        QueryMsg::Vote { address, poll_id } => query_vote(deps, env, address, poll_id),
     }
 }
 
