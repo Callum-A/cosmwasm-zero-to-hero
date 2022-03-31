@@ -1,0 +1,33 @@
+{
+  "name": "next-cosmwasm-keplr-starter",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "rm -r dist || true && next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint && prettier --check .",
+    "prettier:write": "prettier --write ."
+  },
+  "dependencies": {
+    "@cosmjs/cosmwasm-stargate": "^0.27.0",
+    "@cosmjs/proto-signing": "^0.27.0",
+    "@cosmjs/stargate": "^0.27.0",
+    "daisyui": "^1.14.0",
+    "next": "12.1.0",
+    "react": "17.0.2",
+    "react-dom": "17.0.2",
+    "theme-change": "^2.0.2"
+  },
+  "devDependencies": {
+    "@keplr-wallet/types": "^0.9.12",
+    "@types/react": "17.0.19",
+    "autoprefixer": "^10.3.3",
+    "eslint": "7.32.0",
+    "eslint-config-next": "11.1.0",
+    "postcss": "^8.3.6",
+    "prettier": "^2.3.2",
+    "tailwindcss": "^2.2.7",
+    "typescript": "4.3.5"
+  }
+}
