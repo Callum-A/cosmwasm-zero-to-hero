@@ -56,8 +56,8 @@ mod tests {
     use cosmwasm_std::attr;
     use cosmwasm_std::testing::{mock_dependencies, mock_env, mock_info};
 
-    pub const ADDR1: &str = "ADDR1";
-    pub const ADDR2: &str = "ADDR2";
+    pub const ADDR1: &str = "juno1xxx";
+    pub const ADDR2: &str = "juno1yyy";
 
     #[test]
     fn test_instantiate() {
