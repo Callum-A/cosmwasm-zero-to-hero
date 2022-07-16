@@ -7,7 +7,10 @@ use cosmwasm_std::{Binary, Deps, DepsMut, Env, MessageInfo, Response, StdResult}
 use cw2::set_contract_version;
 // 06 Instantiate
 // + use crate::state::{Config, CONFIG};
-use crate::state::{Config, CONFIG};
+// 08 Execute 1
+// - use crate::state::{Config, CONFIG};
+// + use crate::state::{Config, CONFIG, Poll, POLLS};
+use crate::state::{Config, Poll, CONFIG, POLLS};
 
 use crate::error::ContractError;
 use crate::msg::{ExecuteMsg, InstantiateMsg, QueryMsg};
@@ -63,14 +66,96 @@ pub fn instantiate(
         .add_attribute("admin", validated_admin.to_string()))
 }
 
+// 09 Execute 1
+// - _deps: DepsMut,
+// - _env: Env,
+// - _info: MessageInfo,
+// - _msg: ExecuteMsg,
+// + deps: DepsMut,
+// + env: Env,
+// + info: MessageInfo,
+// + msg: ExecuteMsg,
 #[cfg_attr(not(feature = "library"), entry_point)]
 pub fn execute(
-    _deps: DepsMut,
-    _env: Env,
-    _info: MessageInfo,
-    _msg: ExecuteMsg,
+    deps: DepsMut,
+    env: Env,
+    info: MessageInfo,
+    msg: ExecuteMsg,
 ) -> Result<Response, ContractError> {
-    unimplemented!()
+    // 09 Execute 1
+    // - unimplemented!()
+    // + match msg {
+    // +     ExecuteMsg::CreatePoll {
+    // +         poll_id,
+    // +         question,
+    // +         options,
+    // +     } => execute_create_poll(deps, env, info, poll_id, question, options),
+    // +     ExecuteMsg::Vote { poll_id, vote } => unimplemented!(),
+    // + }
+    match msg {
+        ExecuteMsg::CreatePoll {
+            poll_id,
+            question,
+            options,
+        } => execute_create_poll(deps, env, info, poll_id, question, options),
+        ExecuteMsg::Vote { poll_id, vote } => unimplemented!(),
+    }
+}
+
+// 09 Execute 1
+// + fn execute_create_poll(
+// +     deps: DepsMut,
+// +     _env: Env,
+// +     info: MessageInfo,
+// +     poll_id: String,
+// +     question: String,
+// +     options: Vec<String>,
+// + ) -> Result<Response, ContractError> {
+// +     if options.len() > 10 {
+// +         return Err(ContractError::TooManyOptions {});
+// +     }
+// +
+// +     let mut opts: Vec<(String, u64)> = vec![];
+// +     for option in options {
+// +         opts.push((option, 0));
+// +     }
+// +
+// +     let poll = Poll {
+// +         creator: info.sender,
+// +         question,
+// +         options: opts
+// +     };
+// +
+// +     POLLS.save(deps.storage, poll_id, &poll)?;
+// +
+// +     Ok(Response::new())
+// + }
+fn execute_create_poll(
+    deps: DepsMut,
+    _env: Env,
+    info: MessageInfo,
+    poll_id: String,
+    question: String,
+    options: Vec<String>,
+) -> Result<Response, ContractError> {
+    if options.len() > 10 {
+        return Err(ContractError::TooManyOptions {});
+    }
+
+    let mut opts: Vec<(String, u64)> = vec![];
+    for option in options {
+        opts.push((option, 0));
+    }
+
+    let poll = Poll {
+        creator: info.sender,
+        question,
+        options: opts,
+    };
+
+    POLLS.save(deps.storage, poll_id, &poll)?;
+
+    Ok(Response::new())
 }
 
 #[cfg_attr(not(feature = "library"), entry_point)]

@@ -74,7 +74,7 @@ For now your IDE may be screaming at you that this function does not exist, so l
 // Previous code omitted
 fn execute_create_poll(
     deps: DepsMut,
-    env: Env,
+    _env: Env, // _env as we won't be using it
     info: MessageInfo,
     poll_id: String,
     question: String,
@@ -100,8 +100,8 @@ pub enum ContractError {
     #[error("{0}")]
     Std(#[from] StdError),
 
-    #[error("Unauthorized")]
-    Unauthorized {},
+    #[error("Custom Error val: {val:?}")]
+    CustomError { val: String },
 }
 ```
 
@@ -184,10 +184,11 @@ It then adds a tuple of `(option, 0)` to the back of the new mutable `Vec`.
 
 This means we now have our options in the correct format.
 
-Let's construct our `Poll` but firstly, remember to import it somewhere using:
+Let's construct our `Poll` but firstly we need to import the struct and the `Map` in storage. This can be seen below:
 
 ```rust
-use crate::state::Poll;
+// We can add it to our existing config imports
+use crate::state::{Config, CONFIG, Poll, POLLS};
 ```
 
 Alright here's how constructing our `Poll` looks:
@@ -221,12 +222,6 @@ fn execute_create_poll(
 ```
 
 As hinted above it uses `info.sender` for the creator. It simply uses the `question` parameter with no further processing for its question. And it uses our newly created `opts` `Vec` for the options.
-
-Alright we've created it but how do we store it? Well it's time we imported our `POLLS` storage `Map`:
-
-```rust
-use crate::state::POLLS;
-```
 
 So how do we use this? Well firstly we need to store it under a key, in our case `poll_id`. We also need to give it a value to store, in our case `poll`. It also requires `deps.storage` to store values for our contract. So putting this all together how does this look?
 
