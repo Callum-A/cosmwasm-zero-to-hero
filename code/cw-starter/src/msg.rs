@@ -51,17 +51,38 @@ pub enum ExecuteMsg {
     },
 }
 
+// 12 Query
+// - #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
+// - #[serde(rename_all = "snake_case")]
+// - pub enum QueryMsg {
+// -     CustomMsg { val: String },
+// - }
+// + #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
+// + #[serde(rename_all = "snake_case")]
+// + pub enum QueryMsg {
+// +     AllPolls {},
+// +     Poll {
+// +         poll_id: String,
+// +     },
+// +     Vote {
+// +         poll_id: String,
+// +         address: String,
+// +     },
+// + }
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub enum QueryMsg {
-    CustomMsg { val: String },
+    AllPolls {},
+    Poll { poll_id: String },
+    Vote { poll_id: String, address: String },
 }
 
-#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
-#[serde(rename_all = "snake_case")]
-pub struct CustomResponse {
-    val: String,
-}
+// 12 QueryMsg
+// - #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
+// - #[serde(rename_all = "snake_case")]
+// - pub struct CustomResponse {
+// -     val: String,
+// - }
 
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
 #[serde(rename_all = "snake_case")]

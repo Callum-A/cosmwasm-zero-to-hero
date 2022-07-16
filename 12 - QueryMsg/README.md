@@ -81,6 +81,31 @@ pub enum QueryMsg {
 // Following code omitted
 ```
 
+We had to remove `QueryMsg::CustomMsg` in this enum, this has broken a helper in the `src/helpers.rs` file we need to remove, we can simply delete all code location in that file.
+
+We can also remove the following code in `src/msg.rs` as it will not be used:
+
+```rust
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
+#[serde(rename_all = "snake_case")]
+pub struct CustomResponse {
+    val: String,
+}
+```
+
+We also need to correct `examples/schema.rs` by changing the import from `src/msg.rs` to:
+
+```rust
+// Remove CustomResponse
+use cw_starter::msg::{ExecuteMsg, InstantiateMsg, QueryMsg};
+```
+
+Also remove the schema export for it:
+
+```rust
+export_schema(&schema_for!(CustomResponse), &out_dir);
+```
+
 There's our three messages, this should cover the basic functionality for this tutorial. Feel free to add your own routes, with smart contract development the world is your oyster.
 
 ## Follow Up Exercises
