@@ -1,12 +1,12 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "InstantiateMsg",
+  "title": "Ballot",
   "type": "object",
   "required": [
-    "val"
+    "option"
   ],
   "properties": {
-    "val": {
+    "option": {
       "type": "string"
     }
   }

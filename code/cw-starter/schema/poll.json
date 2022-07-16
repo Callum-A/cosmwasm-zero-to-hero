@@ -1,18 +1,36 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "State",
+  "title": "Poll",
   "type": "object",
   "required": [
-    "count",
-    "owner"
+    "creator",
+    "options",
+    "question"
   ],
   "properties": {
-    "count": {
-      "type": "integer",
-      "format": "int32"
-    },
-    "owner": {
+    "creator": {
       "$ref": "#/definitions/Addr"
+    },
+    "options": {
+      "type": "array",
+      "items": {
+        "type": "array",
+        "items": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "integer",
+            "format": "uint64",
+            "minimum": 0.0
+          }
+        ],
+        "maxItems": 2,
+        "minItems": 2
+      }
+    },
+    "question": {
+      "type": "string"
     }
   },
   "definitions": {
