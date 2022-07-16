@@ -27,8 +27,8 @@ mod tests {
     use crate::msg::InstantiateMsg; // our instantate method
 
     // Two fake addresses we will use to mock_info
-    pub const ADDR1: &str = "ADDR1";
-    pub const ADDR2: &str = "ADDR2";
+    pub const ADDR1: &str = "addr1";
+    pub const ADDR2: &str = "addr2";
 }
 ```
 
@@ -63,7 +63,7 @@ mod tests {
     #[test]
     fn test_instantiate() {
         // Mock the dependencies, must be mutable so we can pass it as a mutable, empty vector means our contract has no balance
-        let mut deps = mock_dependencies(&vec![]);
+        let mut deps = mock_dependencies();
         // Mock the contract environment, contains the block info, contract address, etc.
         let env = mock_env();
         // Mock the message info, ADDR1 will be the sender, the empty vec means we sent no funds.
