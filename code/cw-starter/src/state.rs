@@ -53,9 +53,15 @@ pub const CONFIG: Item<Config> = Item::new("config");
 
 // 05 State
 // + pub const POLLS: Map<String, Poll> = Map::new("polls");
+// + pub const BALLOTS: Map<(Addr, String), Ballot> = Map::new("ballots");
+// 15 Spring Cleaning
+// - pub const POLLS: Map<String, Poll> = Map::new("polls");
+// + pub const POLLS: Map<&str, Poll> = Map::new("polls");
 // A map with a String key and Poll value.
 // The key will be a UUID generated clientside
-pub const POLLS: Map<String, Poll> = Map::new("polls");
+pub const POLLS: Map<&str, Poll> = Map::new("polls");
 
-// + pub const BALLOTS: Map<(Addr, String), Ballot> = Map::new("ballots");
-pub const BALLOTS: Map<(Addr, String), Ballot> = Map::new("ballots");
+// 15 Spring Cleaning
+// - pub const BALLOTS: Map<(Addr, String), Ballot> = Map::new("ballots");
+// + pub const BALLOTS: Map<(Addr, &str), Ballot> = Map::new("ballots");
+pub const BALLOTS: Map<(Addr, &str), Ballot> = Map::new("ballots");

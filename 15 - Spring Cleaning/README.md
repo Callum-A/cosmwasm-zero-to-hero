@@ -103,8 +103,8 @@ You may notice in our `execute` code we often clone the strings as the values ar
 
 ```rust
 // Previous code omitted
-pub const POLLS: Map<&String, Poll> = Map::new("polls");
-pub const BALLOTS: Map<(Addr, &String), Ballot> = Map::new("ballots");
+pub const POLLS: Map<&str, Poll> = Map::new("polls");
+pub const BALLOTS: Map<(Addr, &str), Ballot> = Map::new("ballots");
 ```
 
 These changes are visible under the `code/cw-starter` part of this chapter, effectively where we previously used the `String` directly we simply need to prefix it with `&` for example:
