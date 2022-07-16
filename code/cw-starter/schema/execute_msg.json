@@ -5,16 +5,51 @@
     {
       "type": "object",
       "required": [
-        "custom_msg"
+        "create_poll"
       ],
       "properties": {
-        "custom_msg": {
+        "create_poll": {
           "type": "object",
           "required": [
-            "val"
+            "options",
+            "poll_id",
+            "question"
           ],
           "properties": {
-            "val": {
+            "options": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "poll_id": {
+              "type": "string"
+            },
+            "question": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "required": [
+        "vote"
+      ],
+      "properties": {
+        "vote": {
+          "type": "object",
+          "required": [
+            "poll_id",
+            "vote"
+          ],
+          "properties": {
+            "poll_id": {
+              "type": "string"
+            },
+            "vote": {
               "type": "string"
             }
           }

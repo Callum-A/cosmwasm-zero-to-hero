@@ -14,7 +14,9 @@ So let's open `src/msg.rs` and take a look at `ExecuteMsg`. It should look prett
 // Previous code omitted
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
 #[serde(rename_all = "snake_case")]
-pub enum ExecuteMsg {}
+pub enum ExecuteMsg {
+    CustomMsg { val: String },
+}
 // Following code omitted
 ```
 
