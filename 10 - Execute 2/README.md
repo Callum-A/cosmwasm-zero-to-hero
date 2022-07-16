@@ -119,13 +119,20 @@ As you can see if a poll exists (the `Some` branch) we take that poll and store 
 
 If a poll does not exist we simply error, for now I placed a placeholder `Unauthorized` error.
 
-So what's the next step, let's deal with the user's ballot and if it already exists. This is going to get complex so I'll show you it and talk you through it step by step.
+So what is the next step, let's deal with the user's ballot and if it already exists. This is going to get complex so I'll show you it and talk you through it step by step.
+
+Firstly let's add the required imports for our state:
+
+```rust
+// We can add it to our existing config imports
+use crate::state::{Config, CONFIG, Poll, POLLS, Ballot, BALLOTS};
+```
 
 ```rust
 // Previous code omitted
 fn execute_vote(
     deps: DepsMut,
-    env: Env,
+    _env: Env, // underscored as not needed
     info: MessageInfo,
     poll_id: String,
     vote: String,
@@ -133,8 +140,7 @@ fn execute_vote(
     let poll = POLLS.may_load(deps.storage, poll_id.clone())?;
 
     match poll {
-        Some(mut poll) => {
-            Some(mut poll) => { // The poll exists
+        Some(mut poll) => { // The poll exists
             BALLOTS.update(
                 deps.storage,
                 (info.sender, poll_id.clone()),
@@ -192,7 +198,7 @@ So now we need to increment the count of their new vote by 1, some of you may ha
 // Previous code omitted
 fn execute_vote(
     deps: DepsMut,
-    env: Env,
+    _env: Env,
     info: MessageInfo,
     poll_id: String,
     vote: String,
@@ -200,8 +206,7 @@ fn execute_vote(
     let poll = POLLS.may_load(deps.storage, poll_id.clone())?;
 
     match poll {
-        Some(mut poll) => {
-            Some(mut poll) => { // The poll exists
+        Some(mut poll) => { // The poll exists
             BALLOTS.update(
                 deps.storage,
                 (info.sender, poll_id.clone()),
@@ -253,7 +258,7 @@ Then finally we need to actually save the new `poll` variable as we have since u
 // Previous code omitted
 fn execute_vote(
     deps: DepsMut,
-    env: Env,
+    _env: Env,
     info: MessageInfo,
     poll_id: String,
     vote: String,
@@ -261,8 +266,7 @@ fn execute_vote(
     let poll = POLLS.may_load(deps.storage, poll_id.clone())?;
 
     match poll {
-        Some(mut poll) => {
-            Some(mut poll) => { // The poll exists
+        Some(mut poll) => { // The poll exists
             BALLOTS.update(
                 deps.storage,
                 (info.sender, poll_id.clone()),

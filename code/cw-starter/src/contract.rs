@@ -7,10 +7,13 @@ use cosmwasm_std::{Binary, Deps, DepsMut, Env, MessageInfo, Response, StdResult}
 use cw2::set_contract_version;
 // 06 Instantiate
 // + use crate::state::{Config, CONFIG};
-// 08 Execute 1
+// 09 Execute 1
 // - use crate::state::{Config, CONFIG};
 // + use crate::state::{Config, CONFIG, Poll, POLLS};
-use crate::state::{Config, Poll, CONFIG, POLLS};
+// 10 Execute 2
+// - use crate::state::{Config, CONFIG, Poll, POLLS};
+// + use crate::state::{Config, Poll, CONFIG, POLLS, Ballot, BALLOTS};
+use crate::state::{Ballot, Config, Poll, BALLOTS, CONFIG, POLLS};
 
 use crate::error::ContractError;
 use crate::msg::{ExecuteMsg, InstantiateMsg, QueryMsg};
@@ -98,7 +101,10 @@ pub fn execute(
             question,
             options,
         } => execute_create_poll(deps, env, info, poll_id, question, options),
-        ExecuteMsg::Vote { poll_id, vote } => unimplemented!(),
+        // 10 Execute 2
+        // - ExecuteMsg::Vote { poll_id, vote } => unimplemented!(),
+        // + ExecuteMsg::Vote { poll_id, vote } => execute_vote(deps, env, info, poll_id, vote),
+        ExecuteMsg::Vote { poll_id, vote } => execute_vote(deps, env, info, poll_id, vote),
     }
 }
 
@@ -156,6 +162,122 @@ fn execute_create_poll(
     POLLS.save(deps.storage, poll_id, &poll)?;
 
     Ok(Response::new())
+}
+
+// 10 Execute 2
+// + fn execute_vote(
+// +     deps: DepsMut,
+// +     _env: Env,
+// +     info: MessageInfo,
+// +     poll_id: String,
+// +     vote: String,
+// + ) -> Result<Response, ContractError> {
+// +     let poll = POLLS.may_load(deps.storage, poll_id.clone())?;
+// +
+// +     match poll {
+// +         Some(mut poll) => { // The poll exists
+// +
+// +             BALLOTS.update(
+// +                 deps.storage,
+// +                 (info.sender, poll_id.clone()),
+// +                 |ballot| -> StdResult<Ballot> {
+// +                     match ballot {
+// +                         Some(ballot) => {
+// +                             // We need to revoke their old vote
+// +                             // Find the position
+// +                             let position_of_old_vote = poll
+// +                                 .options
+// +                                 .iter()
+// +                                 .position(|option| option.0 == ballot.option)
+// +                                 .unwrap();
+// +                             // Decrement by 1
+// +                             poll.options[position_of_old_vote].1 -= 1;
+// +                             // Update the ballot
+// +                             Ok(Ballot {
+// +                                 option: vote.clone(),
+// +                             })
+// +                         }
+// +                         None => {
+// +                             // Simply add the ballot
+// +                             Ok(Ballot {
+// +                                 option: vote.clone(),
+// +                             })
+// +                         }
+// +                     }
+// +                 },
+// +            )?;
+// +
+// +             // Find the position of the new vote option and increment it by 1
+// +             let position = poll.options.iter().position(|option| option.0 == vote);
+// +             if position.is_none() {
+// +                 return Err(ContractError::Unauthorized {});
+// +             }
+// +             let position = position.unwrap();
+// +             poll.options[position].1 += 1;
+// +
+// +             // Save the update
+// +             POLLS.save(deps.storage, poll_id, &poll)?;
+// +             Ok(Response::new())
+// +         }
+// +         None => Err(ContractError::Unauthorized {}), // The poll does not exist so we just error
+// +     }
+// + }
+fn execute_vote(
+    deps: DepsMut,
+    _env: Env,
+    info: MessageInfo,
+    poll_id: String,
+    vote: String,
+) -> Result<Response, ContractError> {
+    let poll = POLLS.may_load(deps.storage, poll_id.clone())?;
+
+    match poll {
+        Some(mut poll) => {
+            // The poll exists
+            BALLOTS.update(
+                deps.storage,
+                (info.sender, poll_id.clone()),
+                |ballot| -> StdResult<Ballot> {
+                    match ballot {
+                        Some(ballot) => {
+                            // We need to revoke their old vote
+                            // Find the position
+                            let position_of_old_vote = poll
+                                .options
+                                .iter()
+                                .position(|option| option.0 == ballot.option)
+                                .unwrap();
+                            // Decrement by 1
+                            poll.options[position_of_old_vote].1 -= 1;
+                            // Update the ballot
+                            Ok(Ballot {
+                                option: vote.clone(),
+                            })
+                        }
+                        None => {
+                            // Simply add the ballot
+                            Ok(Ballot {
+                                option: vote.clone(),
+                            })
+                        }
+                    }
+                },
+            )?;
+
+            // Find the position of the new vote option and increment it by 1
+            let position = poll.options.iter().position(|option| option.0 == vote);
+            if position.is_none() {
+                return Err(ContractError::Unauthorized {});
+            }
+            let position = position.unwrap();
+            poll.options[position].1 += 1;
+
+            // Save the update
+            POLLS.save(deps.storage, poll_id, &poll)?;
+            Ok(Response::new())
+        }
+        None => Err(ContractError::Unauthorized {}), // The poll does not exist so we just error
+    }
 }
 
 #[cfg_attr(not(feature = "library"), entry_point)]
