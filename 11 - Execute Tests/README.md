@@ -35,17 +35,25 @@ fn test_execute_create_poll_valid() {
 }
 ```
 
+We also need to import the `execute` entrypoint of the contract and the `ExecuteMsg` enum:
+
+```rust
+// Can import it with the instantiate import
+use crate::contract::{instantiate, execute};
+use crate::msg::{InstantiateMsg, ExecuteMsg};
+```
+
 Right theres some more prework we need to do, what you ask? Well in order to execute on a contract it must be instantiated! So let's copy the instantiate code from our instantiate test and simplify it a bit. Here's what it looks like:
 
 ```rust
 #[test]
 fn test_execute_create_poll_valid() {
-    let mut deps = mock_dependencies(&vec![]);
+    let mut deps = mock_dependencies();
     let env = mock_env();
     let info = mock_info(ADDR1, &vec![]);
     // Instantiate the contract
     let msg = InstantiateMsg { admin: None };
-    let res = instantiate(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
+    let _res = instantiate(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
 }
 ```
 
@@ -56,12 +64,12 @@ Alright now we have instantiated our test contract, lets start writing some new 
 ```rust
 #[test]
 fn test_execute_create_poll_valid() {
-    let mut deps = mock_dependencies(&vec![]);
+    let mut deps = mock_dependencies();
     let env = mock_env();
     let info = mock_info(ADDR1, &vec![]);
     // Instantiate the contract
     let msg = InstantiateMsg { admin: None };
-    let res = instantiate(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
+    let _res = instantiate(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
 
     // New execute msg
     let msg = ExecuteMsg::CreatePoll {
@@ -83,12 +91,12 @@ So now we need to call our `execute` function with this info, so make sure you i
 ```rust
 #[test]
 fn test_execute_create_poll_valid() {
-    let mut deps = mock_dependencies(&vec![]);
+    let mut deps = mock_dependencies();
     let env = mock_env();
     let info = mock_info(ADDR1, &vec![]);
     // Instantiate the contract
     let msg = InstantiateMsg { admin: None };
-    let res = instantiate(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
+    let _res = instantiate(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
 
     // New execute msg
     let msg = ExecuteMsg::CreatePoll {
@@ -102,7 +110,7 @@ fn test_execute_create_poll_valid() {
     };
 
     // Unwrap to assert success
-    let res = execute(deps.as_mut(), env, info, msg).unwrap();
+    let _res = execute(deps.as_mut(), env, info, msg).unwrap();
 }
 ```
 
@@ -123,12 +131,12 @@ Alright this test needs the same setup, so I'm going to skip the explanation as 
 ```rust
 #[test]
 fn test_execute_create_poll_invalid() {
-    let mut deps = mock_dependencies(&vec![]);
+    let mut deps = mock_dependencies();
     let env = mock_env();
     let info = mock_info(ADDR1, &vec![]);
     // Instantiate the contract
     let msg = InstantiateMsg { admin: None };
-    let res = instantiate(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
+    let _res = instantiate(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
 }
 ```
 
@@ -137,12 +145,12 @@ Alright so what does our invalid message look like? Well it needs 11 options, so
 ```rust
 #[test]
 fn test_execute_create_poll_invalid() {
-    let mut deps = mock_dependencies(&vec![]);
+    let mut deps = mock_dependencies();
     let env = mock_env();
     let info = mock_info(ADDR1, &vec![]);
     // Instantiate the contract
     let msg = InstantiateMsg { admin: None };
-    let res = instantiate(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
+    let _res = instantiate(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
 
     let msg = ExecuteMsg::CreatePoll {
         poll_id: "some_id".to_string(),
@@ -171,12 +179,12 @@ So now we need to call execute, but how can we assert an error. We know `unwrap`
 ```rust
 #[test]
 fn test_execute_create_poll_invalid() {
-    let mut deps = mock_dependencies(&vec![]);
+    let mut deps = mock_dependencies();
     let env = mock_env();
     let info = mock_info(ADDR1, &vec![]);
     // Instantiate the contract
     let msg = InstantiateMsg { admin: None };
-    let res = instantiate(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
+    let _res = instantiate(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
 
     let msg = ExecuteMsg::CreatePoll {
         poll_id: "some_id".to_string(),
@@ -197,7 +205,7 @@ fn test_execute_create_poll_invalid() {
     };
 
     // Unwrap error to assert failure
-    let err = execute(deps.as_mut(), env, info, msg).unwrap_err();
+    let _err = execute(deps.as_mut(), env, info, msg).unwrap_err();
 }
 ```
 
@@ -212,12 +220,12 @@ Once again here we are writing another test case, let's copy over the code we kn
 ```rust
 #[test]
 fn test_execute_vote_valid() {
-    let mut deps = mock_dependencies(&vec![]);
+    let mut deps = mock_dependencies();
     let env = mock_env();
     let info = mock_info(ADDR1, &vec![]);
     // Instantiate the contract
     let msg = InstantiateMsg { admin: None };
-    let res = instantiate(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
+    let _res = instantiate(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
 }
 ```
 
@@ -228,12 +236,12 @@ We need a poll to vote on! So lets copy some more code from our `execute_create_
 ```rust
 #[test]
 fn test_execute_vote_valid() {
-    let mut deps = mock_dependencies(&vec![]);
+    let mut deps = mock_dependencies();
     let env = mock_env();
     let info = mock_info(ADDR1, &vec![]);
     // Instantiate the contract
     let msg = InstantiateMsg { admin: None };
-    let res = instantiate(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
+    let _res = instantiate(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
 
     // Create the poll
     let msg = ExecuteMsg::CreatePoll {
@@ -245,7 +253,7 @@ fn test_execute_vote_valid() {
             "Osmosis".to_string(),
         ],
     };
-    let res = execute(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
+    let _res = execute(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
 }
 ```
 
@@ -256,12 +264,12 @@ Now onto some new code, lets define a `Vote` message. This will be our initial v
 ```rust
 #[test]
 fn test_execute_vote_valid() {
-    let mut deps = mock_dependencies(&vec![]);
+    let mut deps = mock_dependencies();
     let env = mock_env();
     let info = mock_info(ADDR1, &vec![]);
     // Instantiate the contract
     let msg = InstantiateMsg { admin: None };
-    let res = instantiate(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
+    let _res = instantiate(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
 
     // Create the poll
     let msg = ExecuteMsg::CreatePoll {
@@ -273,14 +281,14 @@ fn test_execute_vote_valid() {
             "Osmosis".to_string(),
         ],
     };
-    let res = execute(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
+    let _res = execute(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
 
     // Create the vote, first time voting
     let msg = ExecuteMsg::Vote {
         poll_id: "some_id".to_string(),
         vote: "Juno".to_string(),
     };
-    let res = execute(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
+    let _res = execute(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
 }
 ```
 
@@ -297,12 +305,12 @@ Let's change the vote to Osmosis, (sorry Cosmos Hub I still love you though).
 ```rust
 #[test]
 fn test_execute_vote_valid() {
-    let mut deps = mock_dependencies(&vec![]);
+    let mut deps = mock_dependencies();
     let env = mock_env();
     let info = mock_info(ADDR1, &vec![]);
     // Instantiate the contract
     let msg = InstantiateMsg { admin: None };
-    let res = instantiate(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
+    let _res = instantiate(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
 
     // Create the poll
     let msg = ExecuteMsg::CreatePoll {
@@ -314,21 +322,21 @@ fn test_execute_vote_valid() {
             "Osmosis".to_string(),
         ],
     };
-    let res = execute(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
+    let _res = execute(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
 
     // Create the vote, first time voting
     let msg = ExecuteMsg::Vote {
         poll_id: "some_id".to_string(),
         vote: "Juno".to_string(),
     };
-    let res = execute(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
+    let _res = execute(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
 
     // Change the vote
     let msg = ExecuteMsg::Vote {
         poll_id: "some_id".to_string(),
         vote: "Osmosis".to_string(),
     };
-    let res = execute(deps.as_mut(), env, info, msg).unwrap();
+    let _res = execute(deps.as_mut(), env, info, msg).unwrap();
 }
 ```
 
@@ -354,12 +362,12 @@ Copy over that instantiate code!
 ```rust
 #[test]
 fn test_execute_vote_invalid() {
-    let mut deps = mock_dependencies(&vec![]);
+    let mut deps = mock_dependencies();
     let env = mock_env();
     let info = mock_info(ADDR1, &vec![]);
     // Instantiate the contract
     let msg = InstantiateMsg { admin: None };
-    let res = instantiate(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
+    let _res = instantiate(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
 }
 ```
 
@@ -368,12 +376,12 @@ Alright that's all familiar let's get to the new stuff. Lets take a vote from ea
 ```rust
 #[test]
 fn test_execute_vote_invalid() {
-    let mut deps = mock_dependencies(&vec![]);
+    let mut deps = mock_dependencies();
     let env = mock_env();
     let info = mock_info(ADDR1, &vec![]);
     // Instantiate the contract
     let msg = InstantiateMsg { admin: None };
-    let res = instantiate(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
+    let _res = instantiate(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
 
     // Create the vote, some_id poll is not created yet.
     let msg = ExecuteMsg::Vote {
@@ -381,7 +389,7 @@ fn test_execute_vote_invalid() {
         vote: "Juno".to_string(),
     };
     // Unwrap to assert error
-    let res = execute(deps.as_mut(), env.clone(), info.clone(), msg).unwrap_err();
+    let _err = execute(deps.as_mut(), env.clone(), info.clone(), msg).unwrap_err();
 }
 ```
 
@@ -395,12 +403,12 @@ Let's copy over the Cosmos coin poll creation code:
 ```rust
 #[test]
 fn test_execute_vote_invalid() {
-    let mut deps = mock_dependencies(&vec![]);
+    let mut deps = mock_dependencies();
     let env = mock_env();
     let info = mock_info(ADDR1, &vec![]);
     // Instantiate the contract
     let msg = InstantiateMsg { admin: None };
-    let res = instantiate(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
+    let _res = instantiate(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
 
     // Create the vote, some_id poll is not created yet.
     let msg = ExecuteMsg::Vote {
@@ -408,7 +416,7 @@ fn test_execute_vote_invalid() {
         vote: "Juno".to_string(),
     };
     // Unwrap to assert error
-    let res = execute(deps.as_mut(), env.clone(), info.clone(), msg).unwrap_err();
+    let _err = execute(deps.as_mut(), env.clone(), info.clone(), msg).unwrap_err();
 
     // Create the poll
     let msg = ExecuteMsg::CreatePoll {
@@ -420,7 +428,7 @@ fn test_execute_vote_invalid() {
             "Osmosis".to_string(),
         ],
     };
-    let res = execute(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
+    let _res = execute(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
 }
 ```
 
@@ -431,12 +439,12 @@ Right, now we need to create a vote with an invalid option. I'm going to use `DV
 ```rust
 #[test]
 fn test_execute_vote_invalid() {
-    let mut deps = mock_dependencies(&vec![]);
+    let mut deps = mock_dependencies();
     let env = mock_env();
     let info = mock_info(ADDR1, &vec![]);
     // Instantiate the contract
     let msg = InstantiateMsg { admin: None };
-    let res = instantiate(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
+    let _res = instantiate(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
 
     // Create the vote, some_id poll is not created yet.
     let msg = ExecuteMsg::Vote {
@@ -444,7 +452,7 @@ fn test_execute_vote_invalid() {
         vote: "Juno".to_string(),
     };
     // Unwrap to assert error
-    let res = execute(deps.as_mut(), env.clone(), info.clone(), msg).unwrap_err();
+    let _err = execute(deps.as_mut(), env.clone(), info.clone(), msg).unwrap_err();
 
     // Create the poll
     let msg = ExecuteMsg::CreatePoll {
@@ -456,7 +464,7 @@ fn test_execute_vote_invalid() {
             "Osmosis".to_string(),
         ],
     };
-    let res = execute(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
+    let _res = execute(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
 
     // Vote on a now existing poll but the option "DVPN" does not exist
     let msg = ExecuteMsg::Vote {
@@ -473,12 +481,12 @@ So say it with me now! Let's unwrap that error!
 ```rust
 #[test]
 fn test_execute_vote_invalid() {
-    let mut deps = mock_dependencies(&vec![]);
+    let mut deps = mock_dependencies();
     let env = mock_env();
     let info = mock_info(ADDR1, &vec![]);
     // Instantiate the contract
     let msg = InstantiateMsg { admin: None };
-    let res = instantiate(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
+    let _res = instantiate(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
 
     // Create the vote, some_id poll is not created yet.
     let msg = ExecuteMsg::Vote {
@@ -486,7 +494,7 @@ fn test_execute_vote_invalid() {
         vote: "Juno".to_string(),
     };
     // Unwrap to assert error
-    let res = execute(deps.as_mut(), env.clone(), info.clone(), msg).unwrap_err();
+    let _err = execute(deps.as_mut(), env.clone(), info.clone(), msg).unwrap_err();
 
     // Create the poll
     let msg = ExecuteMsg::CreatePoll {
@@ -498,14 +506,14 @@ fn test_execute_vote_invalid() {
             "Osmosis".to_string(),
         ],
     };
-    let res = execute(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
+    let _res = execute(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
 
     // Vote on a now existing poll but the option "DVPN" does not exist
     let msg = ExecuteMsg::Vote {
         poll_id: "some_id".to_string(),
         vote: "DVPN".to_string(),
     };
-    let res = execute(deps.as_mut(), env, info, msg).unwrap_err();
+    let _err = execute(deps.as_mut(), env, info, msg).unwrap_err();
 }
 ```
 
