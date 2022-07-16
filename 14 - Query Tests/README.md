@@ -2,6 +2,17 @@
 
 Alright we're back to testing, let's start taking a look at our testing section in `src/contract.rs`.
 
+Before we begin let's import what we will need:
+
+```rust
+// Add from_binary
+use cosmwasm_std::{attr, from_binary};
+// Add QueryMsg and our responses
+use crate::msg::{
+    AllPollsResponse, ExecuteMsg, InstantiateMsg, PollResponse, QueryMsg, VoteResponse,
+};
+```
+
 Let's start with our `AllPoll` query. Call the test `test_query_all_polls`:
 
 ```rust
@@ -19,12 +30,12 @@ This should be second nature now. Similarly to our execute tests we need to inst
 // Previous code omitted
 #[test]
 fn test_query_all_polls() {
-    let mut deps = mock_dependencies(&vec![]);
+    let mut deps = mock_dependencies();
     let env = mock_env();
     let info = mock_info(ADDR1, &vec![]);
     // Instantiate the contract
     let msg = InstantiateMsg { admin: None };
-    let res = instantiate(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
+    let _res = instantiate(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
 }
 // Following code omitted
 ```
@@ -35,12 +46,12 @@ We also need some polls to query! Lets pull in some execute code from our earlie
 // Previous code omitted
 #[test]
 fn test_query_all_polls() {
-    let mut deps = mock_dependencies(&vec![]);
+    let mut deps = mock_dependencies();
     let env = mock_env();
     let info = mock_info(ADDR1, &vec![]);
     // Instantiate the contract
     let msg = InstantiateMsg { admin: None };
-    let res = instantiate(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
+    let _res = instantiate(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
 
     // Create a poll
     let msg = ExecuteMsg::CreatePoll {
@@ -52,7 +63,7 @@ fn test_query_all_polls() {
             "Osmosis".to_string(),
         ],
     };
-    let res = execute(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
+    let _res = execute(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
 
     // Create a second poll
     let msg = ExecuteMsg::CreatePoll {
@@ -60,7 +71,7 @@ fn test_query_all_polls() {
         question: "What's your colour?".to_string(),
         options: vec!["Red".to_string(), "Green".to_string(), "Blue".to_string()],
     };
-    let res = execute(deps.as_mut(), env.clone(), info, msg).unwrap();
+    let _res = execute(deps.as_mut(), env.clone(), info, msg).unwrap();
 }
 // Following code omitted
 ```
@@ -73,12 +84,12 @@ Lets start writing some new code, firstly we need to define a `msg` using our `Q
 // Previous code omitted
 #[test]
 fn test_query_all_polls() {
-    let mut deps = mock_dependencies(&vec![]);
+    let mut deps = mock_dependencies();
     let env = mock_env();
     let info = mock_info(ADDR1, &vec![]);
     // Instantiate the contract
     let msg = InstantiateMsg { admin: None };
-    let res = instantiate(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
+    let _res = instantiate(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
 
     // Create a poll
     let msg = ExecuteMsg::CreatePoll {
@@ -90,7 +101,7 @@ fn test_query_all_polls() {
             "Osmosis".to_string(),
         ],
     };
-    let res = execute(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
+    let _res = execute(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
 
     // Create a second poll
     let msg = ExecuteMsg::CreatePoll {
@@ -98,7 +109,7 @@ fn test_query_all_polls() {
         question: "What's your colour?".to_string(),
         options: vec!["Red".to_string(), "Green".to_string(), "Blue".to_string()],
     };
-    let res = execute(deps.as_mut(), env.clone(), info, msg).unwrap();
+    let _res = execute(deps.as_mut(), env.clone(), info, msg).unwrap();
 
     // Query
     let msg = QueryMsg::AllPolls {};
@@ -116,12 +127,12 @@ First lets get the raw binary and store it in a `bin` variable.
 // Previous code omitted
 #[test]
 fn test_query_all_polls() {
-    let mut deps = mock_dependencies(&vec![]);
+    let mut deps = mock_dependencies();
     let env = mock_env();
     let info = mock_info(ADDR1, &vec![]);
     // Instantiate the contract
     let msg = InstantiateMsg { admin: None };
-    let res = instantiate(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
+    let _res = instantiate(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
 
     // Create a poll
     let msg = ExecuteMsg::CreatePoll {
@@ -133,7 +144,7 @@ fn test_query_all_polls() {
             "Osmosis".to_string(),
         ],
     };
-    let res = execute(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
+    let _res = execute(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
 
     // Create a second poll
     let msg = ExecuteMsg::CreatePoll {
@@ -141,7 +152,7 @@ fn test_query_all_polls() {
         question: "What's your colour?".to_string(),
         options: vec!["Red".to_string(), "Green".to_string(), "Blue".to_string()],
     };
-    let res = execute(deps.as_mut(), env.clone(), info, msg).unwrap();
+    let _res = execute(deps.as_mut(), env.clone(), info, msg).unwrap();
 
     // Query
     let msg = QueryMsg::AllPolls {};
@@ -160,12 +171,12 @@ This is what it looks like:
 // Previous code omitted
 #[test]
 fn test_query_all_polls() {
-    let mut deps = mock_dependencies(&vec![]);
+    let mut deps = mock_dependencies();
     let env = mock_env();
     let info = mock_info(ADDR1, &vec![]);
     // Instantiate the contract
     let msg = InstantiateMsg { admin: None };
-    let res = instantiate(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
+    let _res = instantiate(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
 
     // Create a poll
     let msg = ExecuteMsg::CreatePoll {
@@ -177,7 +188,7 @@ fn test_query_all_polls() {
             "Osmosis".to_string(),
         ],
     };
-    let res = execute(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
+    let _res = execute(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
 
     // Create a second poll
     let msg = ExecuteMsg::CreatePoll {
@@ -185,7 +196,7 @@ fn test_query_all_polls() {
         question: "What's your colour?".to_string(),
         options: vec!["Red".to_string(), "Green".to_string(), "Blue".to_string()],
     };
-    let res = execute(deps.as_mut(), env.clone(), info, msg).unwrap();
+    let _res = execute(deps.as_mut(), env.clone(), info, msg).unwrap();
 
     // Query
     let msg = QueryMsg::AllPolls {};
@@ -203,12 +214,12 @@ So now we have our struct we defined, we expect two polls to be contained in the
 // Previous code omitted
 #[test]
 fn test_query_all_polls() {
-    let mut deps = mock_dependencies(&vec![]);
+    let mut deps = mock_dependencies();
     let env = mock_env();
     let info = mock_info(ADDR1, &vec![]);
     // Instantiate the contract
     let msg = InstantiateMsg { admin: None };
-    let res = instantiate(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
+    let _res = instantiate(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
 
     // Create a poll
     let msg = ExecuteMsg::CreatePoll {
@@ -220,7 +231,7 @@ fn test_query_all_polls() {
             "Osmosis".to_string(),
         ],
     };
-    let res = execute(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
+    let _res = execute(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
 
     // Create a second poll
     let msg = ExecuteMsg::CreatePoll {
@@ -228,7 +239,7 @@ fn test_query_all_polls() {
         question: "What's your colour?".to_string(),
         options: vec!["Red".to_string(), "Green".to_string(), "Blue".to_string()],
     };
-    let res = execute(deps.as_mut(), env.clone(), info, msg).unwrap();
+    let _res = execute(deps.as_mut(), env.clone(), info, msg).unwrap();
 
     // Query
     let msg = QueryMsg::AllPolls {};
@@ -263,12 +274,12 @@ Similarly to above we need to instantiate and create a poll, let's copy over som
 // Previous code omitted
 #[test]
 fn test_query_poll() {
-    let mut deps = mock_dependencies(&vec![]);
+    let mut deps = mock_dependencies();
     let env = mock_env();
     let info = mock_info(ADDR1, &vec![]);
     // Instantiate the contract
     let msg = InstantiateMsg { admin: None };
-    let res = instantiate(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
+    let _res = instantiate(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
 
     // Create a poll
     let msg = ExecuteMsg::CreatePoll {
@@ -280,7 +291,7 @@ fn test_query_poll() {
             "Osmosis".to_string(),
         ],
     };
-    let res = execute(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
+    let _res = execute(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
 }
 // Following code omitted
 ```
@@ -293,12 +304,12 @@ So lets query for a poll that exists, here's what the message looks like:
 // Previous code omitted
 #[test]
 fn test_query_poll() {
-    let mut deps = mock_dependencies(&vec![]);
+    let mut deps = mock_dependencies();
     let env = mock_env();
     let info = mock_info(ADDR1, &vec![]);
     // Instantiate the contract
     let msg = InstantiateMsg { admin: None };
-    let res = instantiate(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
+    let _res = instantiate(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
 
     // Create a poll
     let msg = ExecuteMsg::CreatePoll {
@@ -310,7 +321,7 @@ fn test_query_poll() {
             "Osmosis".to_string(),
         ],
     };
-    let res = execute(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
+    let _res = execute(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
 
     // Query for the poll that exists
     let msg = QueryMsg::Poll {
@@ -328,12 +339,12 @@ Now we need to go through the `Binary` process again, but remember to type it wi
 // Previous code omitted
 #[test]
 fn test_query_poll() {
-    let mut deps = mock_dependencies(&vec![]);
+    let mut deps = mock_dependencies();
     let env = mock_env();
     let info = mock_info(ADDR1, &vec![]);
     // Instantiate the contract
     let msg = InstantiateMsg { admin: None };
-    let res = instantiate(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
+    let _res = instantiate(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
 
     // Create a poll
     let msg = ExecuteMsg::CreatePoll {
@@ -345,7 +356,7 @@ fn test_query_poll() {
             "Osmosis".to_string(),
         ],
     };
-    let res = execute(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
+    let _res = execute(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
 
     // Query for the poll that exists
     let msg = QueryMsg::Poll {
@@ -365,12 +376,12 @@ So now we need to assert a value, luckily the `Option` type has a method called 
 // Previous code omitted
 #[test]
 fn test_query_poll() {
-    let mut deps = mock_dependencies(&vec![]);
+    let mut deps = mock_dependencies();
     let env = mock_env();
     let info = mock_info(ADDR1, &vec![]);
     // Instantiate the contract
     let msg = InstantiateMsg { admin: None };
-    let res = instantiate(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
+    let _res = instantiate(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
 
     // Create a poll
     let msg = ExecuteMsg::CreatePoll {
@@ -382,7 +393,7 @@ fn test_query_poll() {
             "Osmosis".to_string(),
         ],
     };
-    let res = execute(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
+    let _res = execute(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
 
     // Query for the poll that exists
     let msg = QueryMsg::Poll {
@@ -404,12 +415,12 @@ So that's the first case covered, now let's copy that code expect change a few t
 // Previous code omitted
 #[test]
 fn test_query_poll() {
-    let mut deps = mock_dependencies(&vec![]);
+    let mut deps = mock_dependencies();
     let env = mock_env();
     let info = mock_info(ADDR1, &vec![]);
     // Instantiate the contract
     let msg = InstantiateMsg { admin: None };
-    let res = instantiate(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
+    let _res = instantiate(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
 
     // Create a poll
     let msg = ExecuteMsg::CreatePoll {
@@ -421,7 +432,7 @@ fn test_query_poll() {
             "Osmosis".to_string(),
         ],
     };
-    let res = execute(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
+    let _res = execute(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
 
     // Query for the poll that exists
     let msg = QueryMsg::Poll {
@@ -448,12 +459,12 @@ Next we can copy the `Binary` decoding lines.
 // Previous code omitted
 #[test]
 fn test_query_poll() {
-    let mut deps = mock_dependencies(&vec![]);
+    let mut deps = mock_dependencies();
     let env = mock_env();
     let info = mock_info(ADDR1, &vec![]);
     // Instantiate the contract
     let msg = InstantiateMsg { admin: None };
-    let res = instantiate(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
+    let _res = instantiate(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
 
     // Create a poll
     let msg = ExecuteMsg::CreatePoll {
@@ -465,7 +476,7 @@ fn test_query_poll() {
             "Osmosis".to_string(),
         ],
     };
-    let res = execute(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
+    let _res = execute(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
 
     // Query for the poll that exists
     let msg = QueryMsg::Poll {
@@ -492,12 +503,12 @@ Next up we need to assert a value again. Luckily `Option` also has an `is_none()
 // Previous code omitted
 #[test]
 fn test_query_poll() {
-    let mut deps = mock_dependencies(&vec![]);
+    let mut deps = mock_dependencies();
     let env = mock_env();
     let info = mock_info(ADDR1, &vec![]);
     // Instantiate the contract
     let msg = InstantiateMsg { admin: None };
-    let res = instantiate(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
+    let _res = instantiate(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
 
     // Create a poll
     let msg = ExecuteMsg::CreatePoll {
@@ -509,7 +520,7 @@ fn test_query_poll() {
             "Osmosis".to_string(),
         ],
     };
-    let res = execute(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
+    let _res = execute(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
 
     // Query for the poll that exists
     let msg = QueryMsg::Poll {
@@ -558,12 +569,12 @@ Lets bring over some code we've used before to do this:
 // Previous code omitted
 #[test]
 fn test_query_vote() {
-    let mut deps = mock_dependencies(&vec![]);
+    let mut deps = mock_dependencies();
     let env = mock_env();
     let info = mock_info(ADDR1, &vec![]);
     // Instantiate the contract
     let msg = InstantiateMsg { admin: None };
-    let res = instantiate(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
+    let _res = instantiate(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
 
     // Create a poll
     let msg = ExecuteMsg::CreatePoll {
@@ -575,14 +586,14 @@ fn test_query_vote() {
             "Osmosis".to_string(),
         ],
     };
-    let res = execute(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
+    let _res = execute(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
 
     // Create a vote
     let msg = ExecuteMsg::Vote {
         poll_id: "some_id_1".to_string(),
         vote: "Juno".to_string(),
     };
-    let res = execute(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
+    let _res = execute(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
 }
 // Following code omitted
 ```
@@ -595,12 +606,12 @@ Let's outline our new query message, lets cover our vote that exists case, meani
 // Previous code omitted
 #[test]
 fn test_query_vote() {
-    let mut deps = mock_dependencies(&vec![]);
+    let mut deps = mock_dependencies();
     let env = mock_env();
     let info = mock_info(ADDR1, &vec![]);
     // Instantiate the contract
     let msg = InstantiateMsg { admin: None };
-    let res = instantiate(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
+    let _res = instantiate(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
 
     // Create a poll
     let msg = ExecuteMsg::CreatePoll {
@@ -612,14 +623,14 @@ fn test_query_vote() {
             "Osmosis".to_string(),
         ],
     };
-    let res = execute(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
+    let _res = execute(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
 
     // Create a vote
     let msg = ExecuteMsg::Vote {
         poll_id: "some_id_1".to_string(),
         vote: "Juno".to_string(),
     };
-    let res = execute(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
+    let _res = execute(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
 
     // Query for a vote that exists
     let msg = QueryMsg::Vote {
@@ -638,12 +649,12 @@ Now lets add the `Binary` code, remember to set the type of `res` to `VoteRespon
 // Previous code omitted
 #[test]
 fn test_query_vote() {
-    let mut deps = mock_dependencies(&vec![]);
+    let mut deps = mock_dependencies();
     let env = mock_env();
     let info = mock_info(ADDR1, &vec![]);
     // Instantiate the contract
     let msg = InstantiateMsg { admin: None };
-    let res = instantiate(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
+    let _res = instantiate(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
 
     // Create a poll
     let msg = ExecuteMsg::CreatePoll {
@@ -655,21 +666,21 @@ fn test_query_vote() {
             "Osmosis".to_string(),
         ],
     };
-    let res = execute(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
+    let _res = execute(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
 
     // Create a vote
     let msg = ExecuteMsg::Vote {
         poll_id: "some_id_1".to_string(),
         vote: "Juno".to_string(),
     };
-    let res = execute(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
+    let _res = execute(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
 
     // Query for a vote that exists
     let msg = QueryMsg::Vote {
         poll_id: "some_id_1".to_string(),
         address: ADDR1.to_string(),
     };
-    let bin = query(deps.as_ref(), env, msg).unwrap();
+    let bin = query(deps.as_ref(), env.clone(), msg).unwrap();
     let res: VoteResponse = from_binary(&bin).unwrap();
 }
 // Following code omitted
@@ -683,12 +694,12 @@ Now we're going to use that helper `assert!` with the `is_some()` method, again 
 // Previous code omitted
 #[test]
 fn test_query_vote() {
-    let mut deps = mock_dependencies(&vec![]);
+    let mut deps = mock_dependencies();
     let env = mock_env();
     let info = mock_info(ADDR1, &vec![]);
     // Instantiate the contract
     let msg = InstantiateMsg { admin: None };
-    let res = instantiate(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
+    let _res = instantiate(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
 
     // Create a poll
     let msg = ExecuteMsg::CreatePoll {
@@ -700,21 +711,21 @@ fn test_query_vote() {
             "Osmosis".to_string(),
         ],
     };
-    let res = execute(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
+    let _res = execute(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
 
     // Create a vote
     let msg = ExecuteMsg::Vote {
         poll_id: "some_id_1".to_string(),
         vote: "Juno".to_string(),
     };
-    let res = execute(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
+    let _res = execute(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
 
     // Query for a vote that exists
     let msg = QueryMsg::Vote {
         poll_id: "some_id_1".to_string(),
         address: ADDR1.to_string(),
     };
-    let bin = query(deps.as_ref(), env, msg).unwrap();
+    let bin = query(deps.as_ref(), env.clone(), msg).unwrap();
     let res: VoteResponse = from_binary(&bin).unwrap();
     // Expect the vote to exist
     assert!(res.vote.is_some());
@@ -730,12 +741,12 @@ So we need to use a `poll_id` that does not exist, and hell why not lets also us
 // Previous code omitted
 #[test]
 fn test_query_vote() {
-    let mut deps = mock_dependencies(&vec![]);
+    let mut deps = mock_dependencies();
     let env = mock_env();
     let info = mock_info(ADDR1, &vec![]);
     // Instantiate the contract
     let msg = InstantiateMsg { admin: None };
-    let res = instantiate(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
+    let _res = instantiate(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
 
     // Create a poll
     let msg = ExecuteMsg::CreatePoll {
@@ -747,21 +758,21 @@ fn test_query_vote() {
             "Osmosis".to_string(),
         ],
     };
-    let res = execute(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
+    let _res = execute(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
 
     // Create a vote
     let msg = ExecuteMsg::Vote {
         poll_id: "some_id_1".to_string(),
         vote: "Juno".to_string(),
     };
-    let res = execute(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
+    let _res = execute(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
 
     // Query for a vote that exists
     let msg = QueryMsg::Vote {
         poll_id: "some_id_1".to_string(),
         address: ADDR1.to_string(),
     };
-    let bin = query(deps.as_ref(), env, msg).unwrap();
+    let bin = query(deps.as_ref(), env.clone(), msg).unwrap();
     let res: VoteResponse = from_binary(&bin).unwrap();
     // Expect the vote to exist
     assert!(res.vote.is_some());
@@ -783,12 +794,12 @@ Next let's copy over the decoding code:
 // Previous code omitted
 #[test]
 fn test_query_vote() {
-    let mut deps = mock_dependencies(&vec![]);
+    let mut deps = mock_dependencies();
     let env = mock_env();
     let info = mock_info(ADDR1, &vec![]);
     // Instantiate the contract
     let msg = InstantiateMsg { admin: None };
-    let res = instantiate(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
+    let _res = instantiate(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
 
     // Create a poll
     let msg = ExecuteMsg::CreatePoll {
@@ -800,21 +811,21 @@ fn test_query_vote() {
             "Osmosis".to_string(),
         ],
     };
-    let res = execute(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
+    let _res = execute(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
 
     // Create a vote
     let msg = ExecuteMsg::Vote {
         poll_id: "some_id_1".to_string(),
         vote: "Juno".to_string(),
     };
-    let res = execute(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
+    let _res = execute(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
 
     // Query for a vote that exists
     let msg = QueryMsg::Vote {
         poll_id: "some_id_1".to_string(),
         address: ADDR1.to_string(),
     };
-    let bin = query(deps.as_ref(), env, msg).unwrap();
+    let bin = query(deps.as_ref(), env.clone(), msg).unwrap();
     let res: VoteResponse = from_binary(&bin).unwrap();
     // Expect the vote to exist
     assert!(res.vote.is_some());
@@ -836,12 +847,12 @@ All very familiar, next up we need to `assert!` the value using the `is_none()` 
 // Previous code omitted
 #[test]
 fn test_query_vote() {
-    let mut deps = mock_dependencies(&vec![]);
+    let mut deps = mock_dependencies();
     let env = mock_env();
     let info = mock_info(ADDR1, &vec![]);
     // Instantiate the contract
     let msg = InstantiateMsg { admin: None };
-    let res = instantiate(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
+    let _res = instantiate(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
 
     // Create a poll
     let msg = ExecuteMsg::CreatePoll {
@@ -853,21 +864,21 @@ fn test_query_vote() {
             "Osmosis".to_string(),
         ],
     };
-    let res = execute(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
+    let _res = execute(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
 
     // Create a vote
     let msg = ExecuteMsg::Vote {
         poll_id: "some_id_1".to_string(),
         vote: "Juno".to_string(),
     };
-    let res = execute(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
+    let _res = execute(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
 
     // Query for a vote that exists
     let msg = QueryMsg::Vote {
         poll_id: "some_id_1".to_string(),
         address: ADDR1.to_string(),
     };
-    let bin = query(deps.as_ref(), env, msg).unwrap();
+    let bin = query(deps.as_ref(), env.clone(), msg).unwrap();
     let res: VoteResponse = from_binary(&bin).unwrap();
     // Expect the vote to exist
     assert!(res.vote.is_some());
