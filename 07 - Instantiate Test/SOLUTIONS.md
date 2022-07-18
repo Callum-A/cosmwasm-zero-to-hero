@@ -8,7 +8,7 @@ So you attempted the follow up exercises, I'm going to give solutions in snippet
 // Previous code omitted
 #[test]
 fn test_instantiate_with_admin() {
-    let mut deps = mock_dependencies(&vec![]);
+    let mut deps = mock_dependencies();
     let env = mock_env();
     // Send as ADDR1 to show admin is different
     let info = mock_info(ADDR1, &vec![]);

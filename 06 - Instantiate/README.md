@@ -104,7 +104,9 @@ Currently our `InstantiateMsg` looks like:
 ```rust
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
 #[serde(rename_all = "snake_case")]
-pub struct InstantiateMsg {}
+pub struct InstantiateMsg {
+    pub val: String,
+}
 ```
 
 Boring! Let's update it to:
@@ -201,10 +203,10 @@ As we have modified the instantiate arguments, now's an ideal time to talk throu
 -   `info` - Message metadata, contains the sender of the message (`Addr`) and the funds sent with it a `Vec<Coin>`.
 -   `msg` - The `InstantiateMsg` you define in `src/msg.rs`.
 
-So we set some contract metadata but we still haven't implemented any logic. Alright let's create our `Config` struct. Make sure you import it using:
+So we set some contract metadata but we still haven't implemented any logic. Alright let's create our `Config` struct and store it. Make sure you import the struct itself and the storage:
 
 ```rust
-use crate::state::Config;
+use crate::state::{Config, CONFIG};
 ```
 
 Alright we're ready to set our `Config` firstly lets use this instantiate message to work out who our admin is going to be. We can do that using:

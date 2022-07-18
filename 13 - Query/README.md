@@ -11,6 +11,8 @@ So lets start by thinking about our `AllPolls` message and what we want to retur
 Let's place it at the bottom of `src/msg.rs` and name it `AllPollsResponse` to make it clear what it is for.
 
 ```rust
+// Needed import
+use crate::state::Poll;
 // Previous code omitted
 // Needed macro derivations
 #[derive(Serialize, Deserialize, Clone, PartialEq, JsonSchema, Debug)]
@@ -40,6 +42,8 @@ Notice the same derivations, the only difference really is the member variable `
 One last response struct, this time for `Vote`. This route has the same problem as before, a user may not have voted before. Let's use `Option` again:
 
 ```rust
+// Needed imports
+use crate::state::{Poll, Ballot};
 // Previous code omitted
 #[derive(Serialize, Deserialize, Clone, PartialEq, JsonSchema, Debug)]
 pub struct VoteResponse {
@@ -72,11 +76,20 @@ pub fn query(deps: Deps, env: Env, msg: QueryMsg) -> StdResult<Binary> {
 }
 ```
 
+Before we start let's import all of what we will need:
+
+```rust
+// Add Order and to_binary
+use cosmwasm_std::{Binary, Deps, DepsMut, Env, MessageInfo, Response, StdResult, Order, to_binary};
+// Add our responses
+use crate::msg::{ExecuteMsg, InstantiateMsg, QueryMsg, AllPollsResponse, PollResponse, VoteResponse};
+```
+
 Let's start by implementing the `AllPoll` route, so lets define a new function `query_all_polls`, self explanatory right? Here's what it looks like:
 
 ```rust
 // Previous code omitted
-fn query_all_polls(deps: Deps, env: Env) -> StdResult<Binary> {
+fn query_all_polls(deps: Deps, _env: Env) -> StdResult<Binary> {
     unimplemented!()
 }
 // Following code omitted
@@ -88,7 +101,7 @@ Now for a little bit of complex code, as we store our polls as a map, we need to
 
 ```rust
 // Previous code omitted
-fn query_all_polls(deps: Deps, env: Env) -> StdResult<Binary> {
+fn query_all_polls(deps: Deps, _env: Env) -> StdResult<Binary> {
     let polls = POLLS
         .range(deps.storage, None, None, Order::Ascending)
         .map(|p| Ok(p?.1))
@@ -115,7 +128,7 @@ Here's what it looks like for `AllPolls`:
 
 ```rust
 // Previous code omitted
-fn query_all_polls(deps: Deps, env: Env) -> StdResult<Binary> {
+fn query_all_polls(deps: Deps, _env: Env) -> StdResult<Binary> {
     let polls = POLLS
         .range(deps.storage, None, None, Order::Ascending)
         .map(|p| Ok(p?.1))
@@ -125,6 +138,8 @@ fn query_all_polls(deps: Deps, env: Env) -> StdResult<Binary> {
 }
 // Following code omitted
 ```
+
+In reality this query would need to be paginated with `start_after` variable and a max per page `limit` variable. But for the sake of this tutorial I'll keep it simple.
 
 Now we can go back to our `query` function and call this function.
 
@@ -144,7 +159,7 @@ Lets work our way down, the code gets simpler from now I promise.
 Define a `query_poll` function that takes `deps`, `env` and `poll_id`:
 
 ```rust
-fn query_poll(deps: Deps, env: Env, poll_id: String) -> StdResult<Binary> {
+fn query_poll(deps: Deps, _env: Env, poll_id: String) -> StdResult<Binary> {
     unimplemented!()
 }
 ```
@@ -154,7 +169,7 @@ Alright now lets access our storage, I wonder if there's a helper function which
 There is! It's the `may_load` function. Here's what it looks like:
 
 ```rust
-fn query_poll(deps: Deps, env: Env, poll_id: String) -> StdResult<Binary> {
+fn query_poll(deps: Deps, _env: Env, poll_id: String) -> StdResult<Binary> {
     let poll = POLLS.may_load(deps.storage, poll_id)?;
 }
 ```
@@ -164,7 +179,7 @@ The call looks the exact same as `load` but the `poll` variable is now an `Optio
 We can now plug this variable into our `PollResponse` struct, ensuring to encode it to `Binary`:
 
 ```rust
-fn query_poll(deps: Deps, env: Env, poll_id: String) -> StdResult<Binary> {
+fn query_poll(deps: Deps, _env: Env, poll_id: String) -> StdResult<Binary> {
     let poll = POLLS.may_load(deps.storage, poll_id)?;
     to_binary(&PollResponse { poll })
 }
@@ -186,7 +201,7 @@ pub fn query(deps: Deps, env: Env, msg: QueryMsg) -> StdResult<Binary> {
 Onto our last one, this has the exact same problem as `query_poll` we need that `may_load` function again. Let's define the function first:
 
 ```rust
-fn query_vote(deps: Deps, env: Env, address: String, poll_id: String) -> StdResult<Binary> {
+fn query_vote(deps: Deps, _env: Env, address: String, poll_id: String) -> StdResult<Binary> {
     unimplemented!()
 }
 ```
@@ -194,7 +209,7 @@ fn query_vote(deps: Deps, env: Env, address: String, poll_id: String) -> StdResu
 We also need to validate the `address` variable remember, let's do that now using a helper function called `deps.api.addr_validate` it takes a reference to a `String`. We can call it like:
 
 ```rust
-fn query_vote(deps: Deps, env: Env, address: String, poll_id: String) -> StdResult<Binary> {
+fn query_vote(deps: Deps, _env: Env, address: String, poll_id: String) -> StdResult<Binary> {
     let validated_address = deps.api.addr_validate(&address).unwrap();
     unimplemented!()
 }
@@ -203,7 +218,7 @@ fn query_vote(deps: Deps, env: Env, address: String, poll_id: String) -> StdResu
 We `unwrap` it to assert success, this gives us the type `Addr` stored under `validate_address` which we can now use to key our map. Lets use the `may_load` function again to get the `Option<Ballot>` we need:
 
 ```rust
-fn query_vote(deps: Deps, env: Env, address: String, poll_id: String) -> StdResult<Binary> {
+fn query_vote(deps: Deps, _env: Env, address: String, poll_id: String) -> StdResult<Binary> {
     let validated_address = deps.api.addr_validate(&address).unwrap();
     let vote = BALLOTS.may_load(deps.storage, (validated_address, poll_id))?;
     unimplemented!()
@@ -213,7 +228,7 @@ fn query_vote(deps: Deps, env: Env, address: String, poll_id: String) -> StdResu
 All very similar to what we have seen before now, and finally lets encode our result to `Binary`:
 
 ```rust
-fn query_vote(deps: Deps, env: Env, address: String, poll_id: String) -> StdResult<Binary> {
+fn query_vote(deps: Deps, _env: Env, address: String, poll_id: String) -> StdResult<Binary> {
     let validated_address = deps.api.addr_validate(&address).unwrap();
     let vote = BALLOTS.may_load(deps.storage, (validated_address, poll_id))?;
 
