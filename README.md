@@ -11,3 +11,11 @@ Other articles:
 -   [Cosmwasm Anatomy of a Smart Contract](https://docs.cosmwasm.com/dev-academy/develop-smart-contract/intro)
 -   [Cosmwasm GitHub](https://github.com/CosmWasm)
 -   [Interwasm GitHub](https://github.com/InterWasm)
+
+## Donations
+
+This tutorial will remain free and will always be free. If you would like to donate (you are no means required to) here are some addresses to send funds to:
+
+- Cosmos Hub: cosmos1q06wmnsyqqvuahzev6qfyjs07qs45c9td8jxdy
+- Osmosis: osmo1q06wmnsyqqvuahzev6qfyjs07qs45c9t9upkmk
+- Juno: juno1q06wmnsyqqvuahzev6qfyjs07qs45c9tm43a2c
