@@ -58,10 +58,10 @@ cargo generate --git https://github.com/CosmWasm/cw-template.git --branch <BRANC
 
 For compatibility I am going to use an older version using the branch flag. This means if you are following along (you should be) we will be using the same package versions.
 
-The version I will be using is `clean-1.0-beta`. This version has minimal boilerplate so we won't have to delete much, although it isn't the latest version. So run the command:
+The version I will be using is `1.0-minimal`. This version has minimal boilerplate so we won't have to delete much, although it isn't the latest version. So run the command:
 
 ```bash
-cargo generate --git https://github.com/CosmWasm/cw-template.git --branch clean-1.0-beta --name cw-starter
+cargo generate --git https://github.com/CosmWasm/cw-template.git --branch 1.0-minimal --name cw-starter
 ```
 
 Once complete the output should look something like the following:
