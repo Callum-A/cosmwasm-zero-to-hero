@@ -1,6 +1,6 @@
 # Part Fourteen - Query Tests
 
-Alright we're back to testing, let's start taking a look at our testing section in `src/contract.rs`.
+We're back to testing, let's start taking a look at our testing section in `src/contract.rs`.
 
 Before we begin let's import what we will need:
 
@@ -24,7 +24,7 @@ fn test_query_all_polls() {
 // Following code omitted
 ```
 
-This should be second nature now. Similarly to our execute tests we need to instantiate the contract, lets copy over that code from another test:
+This should be second nature now. Similarly to our execute tests we need to instantiate the contract, lets's copy over that code from another test:
 
 ```rust
 // Previous code omitted
@@ -40,7 +40,7 @@ fn test_query_all_polls() {
 // Following code omitted
 ```
 
-We also need some polls to query! Lets pull in some execute code from our earlier tests, lets create two polls:
+We also need some polls to query! Let's pull in some executed code from our earlier tests, lets's create two polls:
 
 ```rust
 // Previous code omitted
@@ -78,7 +78,7 @@ fn test_query_all_polls() {
 
 We now have two polls so we expect two polls when we query our route.
 
-Lets start writing some new code, firstly we need to define a `msg` using our `QueryMsg` enum:
+Start writing some new code, firstly we need to define a `msg` using our `QueryMsg` enum:
 
 ```rust
 // Previous code omitted
@@ -117,11 +117,11 @@ fn test_query_all_polls() {
 // Following code omitted
 ```
 
-Looks very similar to our execute messages except we use the `QueryMsg` enum, and of course we want all polls so we use the `AllPoll`.
+Looks very similar to our execute messages except we use the `QueryMsg` enum, and of course, we want all polls so we use the `AllPoll`.
 
 Next up I'm going to cover the other side of why we need to encode our responses to `Binary`, now we need to decode them back to our structs.
 
-First lets get the raw binary and store it in a `bin` variable.
+First, get the raw binary and store it in a `bin` variable.
 
 ```rust
 // Previous code omitted
@@ -163,7 +163,7 @@ fn test_query_all_polls() {
 
 There is also a slight difference here, instead of using `deps.as_mut` which allows the dependencies to be mutable so we can change our contract state. We use `deps.as_ref` as queries cannot change the state of a contract.
 
-That seems simply enough, we now have the raw binary stored, but now you ask how do we decode it? Well Cosmwasm provides a helper `from_binary` for that. However when doing this we need to define a type for our variable so that `from_binary` knows what to expect.
+That seems simple enough, we now have the raw binary stored, but now you ask how do we decode it? Well, Cosmwasm provides a helper `from_binary` for that. However, when doing this we need to define a type for our variable so that `from_binary` knows what to expect.
 
 This is what it looks like:
 
@@ -208,7 +208,7 @@ fn test_query_all_polls() {
 
 Without the `AllPollsResponse` it would throw an error, `from_binary` also returns an `StdResult` so we `unwrap` it as we assume success.
 
-So now we have our struct we defined, we expect two polls to be contained in the `res.polls` variable. Lets assert this length using the `Vec` `.len()` method. Heres the code:
+So now we have the struct we defined, we expect two polls to be contained in the `res.polls` variable. Lets assert this length using the `Vec` `.len()` method. Here's the code:
 
 ```rust
 // Previous code omitted
@@ -252,10 +252,10 @@ fn test_query_all_polls() {
 
 That's our first test written and an overview of how to unit-test query routes. Run `cargo test` in your terminal to show that it is working!
 
-Lets now test the `Poll` route, there are two main cases:
+Let's now test the `Poll` route, there are two main cases:
 
-1. We query for a poll and it exists, expect the response to be `Some(poll)`.
-2. We query for a poll and it does not exist, expect the response to be `None`.
+1. We query for a poll and if it exists, expect the response to be `Some(poll)`.
+2. We query for a poll and if it does not exist, expect the response to be `None`.
 
 So let's outline our test, call it `test_query_poll`:
 
@@ -268,7 +268,7 @@ fn test_query_poll() {
 // Following code omitted
 ```
 
-Similarly to above we need to instantiate and create a poll, let's copy over some code to do that:
+Similarly to above, we need to instantiate and create a poll, let's copy over some code to do that:
 
 ```rust
 // Previous code omitted
@@ -298,7 +298,7 @@ fn test_query_poll() {
 
 This should now be second nature, I don't need to explain what this does now. If you are confused double back to our instantiate test and execute test chapters.
 
-So lets query for a poll that exists, here's what the message looks like:
+So let's query for a poll that exists, here's what the message looks like:
 
 ```rust
 // Previous code omitted
@@ -409,7 +409,7 @@ fn test_query_poll() {
 
 `assert!` is similar to `assert_eq!` except it expects the value to be true. It just makes the code simpler to write.
 
-So that's the first case covered, now let's copy that code expect change a few things. The first is to change `poll_id` to something that does not exist:
+So that's the first case covered, now let's copy that code except change a few things. The first is to change `poll_id` to something that does not exist:
 
 ```rust
 // Previous code omitted
@@ -453,7 +453,7 @@ fn test_query_poll() {
 
 I simply called my `poll_id`, `some_id_not_exist` to make it clear that it does not exist.
 
-Next we can copy the `Binary` decoding lines.
+Next, we can copy the `Binary` decoding lines.
 
 ```rust
 // Previous code omitted
@@ -545,7 +545,7 @@ fn test_query_poll() {
 
 Boom 2/3 tests done, run `cargo test` in your terminal to see it in action!
 
-Now onto our next test, lets call it `test_query_vote`:
+Now onto our next test, let's call it `test_query_vote`:
 
 ```rust
 // Previous code omitted
@@ -556,14 +556,14 @@ fn test_query_vote() {
 // Following code omitted
 ```
 
-Alright lets outline our test scenarios:
+Let's outline our test scenarios:
 
-1. Query for a vote that does exist, expect a value.
+1. Query for a vote that does exist, and expect a value.
 2. Query for a vote that does not exist, expect none.
 
 We also need to make sure we instantiate our contract, create a poll and create a vote.
 
-Lets bring over some code we've used before to do this:
+Let's bring over some code we've used before to do this:
 
 ```rust
 // Previous code omitted
@@ -600,7 +600,7 @@ fn test_query_vote() {
 
 I went fast over this as we've seen all this before.
 
-Let's outline our new query message, lets cover our vote that exists case, meaning we are querying for the vote on `poll_id` `some_id_1` and from address `ADDR1`.
+Let's outline our new query message, lets's cover our vote that exists case, meaning we are querying for the vote on `poll_id` `some_id_1` and from address `ADDR1`.
 
 ```rust
 // Previous code omitted
@@ -643,7 +643,7 @@ fn test_query_vote() {
 
 We use the `ADDR1` helper variable we defined right at the very start of the testing chapter.
 
-Now lets add the `Binary` code, remember to set the type of `res` to `VoteResponse`:
+Now let's add the `Binary` code, remember to set the type of `res` to `VoteResponse`:
 
 ```rust
 // Previous code omitted
@@ -735,7 +735,7 @@ fn test_query_vote() {
 
 This test is half done now, let's cover the other case!
 
-So we need to use a `poll_id` that does not exist, and hell why not lets also use a random address. We defined `ADDR2` for this use case earlier. Here's the message:
+So we need to use a `poll_id` that does not exist, and hell why not let's also use a random address. We defined `ADDR2` for this use case earlier. Here's the message:
 
 ```rust
 // Previous code omitted
@@ -788,7 +788,7 @@ fn test_query_vote() {
 
 As you can see we never create a poll with ID `some_id_2` and we also never created a vote using `ADDR2`.
 
-Next let's copy over the decoding code:
+Next, copy over the decoding code:
 
 ```rust
 // Previous code omitted
@@ -898,7 +898,7 @@ fn test_query_vote() {
 
 There we have it, our last test is complete. Run `cargo test` in your terminal to see all our tests running. Satisfying right?
 
-Next chapter will be a conclusion chapter for the smart contract side of this tutorial outlining some improvements and problems that I expect you to now have the knowledge to resolve. All in all this isn't the best implementation but you should now have the knowledge to go "Huh, I can probably do XYZ this way instead!". The world really is your oyster with smart contract development.
+The next chapter will be a conclusion chapter for the smart contract side of this tutorial outlining some improvements and problems that I expect you to now have the knowledge to resolve. All in all, this isn't the best implementation but you should now have the knowledge to go "Huh, I can probably do XYZ this way instead!". The world is your oyster with smart contract development.
 
 ## Follow Up Exercises
 

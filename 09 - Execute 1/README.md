@@ -1,8 +1,8 @@
 # Part Nine - Execute 1
 
-Alright this is the first part where we will be writing core execution logic.
+This is the first part where we will be writing core execution logic.
 
-So we implemented our messages last time, lets take a look at `src/contract.rs` and more specifically that unimplemented execution function.
+So we implemented our messages last time, let's take a look at `src/contract.rs` and more specifically that unimplemented execution function.
 
 ```rust
 #[cfg_attr(not(feature = "library"), entry_point)]
@@ -16,9 +16,9 @@ pub fn execute(
 }
 ```
 
-Looks very empty right? Well as your contracts grow this will be a lot of the logic. This function effectively becomes a switch case (in Rust more specifically a match case) redirecting appropriate messages to appropriate function calls.
+Looks very empty right? Well as your contracts grow this will be a lot of the logic. This function effectively becomes a switch case (in Rust more specifically a matching case) redirecting appropriate messages to appropriate function calls.
 
-So let's start implementing this redirection! To start with we want to `match` the `msg` variable for all it's different types. Luckily Rust supports enum pattern matching.
+So let's start implementing this redirection! To start with we want to `match` the `msg` variable for all its different types. Luckily Rust supports enum pattern matching.
 
 ```rust
 #[cfg_attr(not(feature = "library"), entry_point)]
@@ -39,15 +39,15 @@ pub fn execute(
 }
 ```
 
-So lets talk throuugh what this actually does, well to start with it determines what type of message the `msg` variable is. It then destructures it into the variables that make up the message (the parts within the `{}`). Those variables line up with the ones we defined in the message last chapter.
+So let's talk through what this does, well to start with it determines what type of message the `msg` variable is. It then destructures it into the variables that make up the message (the parts within the `{}`). Those variables line up with the ones we defined in the message in the last chapter.
 
 And then the `=>` means it calls the function, in our case we simply use the `unimplemented!` macro as a placeholder.
 
-So lets start writing our first implementation. So I like to follow the following pattern for my `execute` and `query` messages. The entry point is `execute` but each message calls its own function often named after the message. For example for `CreatePoll` the function name would be `execute_create_poll` now at a glance I can tell that this function executes the create poll message.
+So let's start writing our first implementation. So I like to follow the following pattern for my `execute` and `query` messages. The entry point is `execute` but each message calls its function often named after the message. For example for `CreatePoll` the function name would be `execute_create_poll` now at a glance I can tell that this function executes the create a poll message.
 
 I also like the pass all the `deps`, `env`, and `info` variables to each execute function, as I may need them for logic within the body, for example accessing storage.
 
-We also need the relevant information, for our `CreatePoll` example this is the `poll_id`, `question` and `options`. So this is how our `execute` body is now going to look:
+We also need the relevant information, for our `CreatePoll` example, this is the `poll_id`, `question` and `options`. So this is how our `execute` body is now going to look:
 
 ```rust
 #[cfg_attr(not(feature = "library"), entry_point)]
@@ -87,9 +87,9 @@ fn execute_create_poll(
 
 We define the function with the corresponding types for the parameter and also match the return type of the root `execute` function. This allows us to return our function calls directly in the match case. We've handled the type `Result<Response, ContractError>` before in our `instantiate`.
 
-So lets start implementing the code right? First I want to introduce you to the `ContractError` type. So we need an error state, as the developer of this polling service we can say the max amount of options is 10. Anymore and we will throw an error.
+So let's start implementing the code right? First I want to introduce you to the `ContractError` type. So we need an error state, as the developer of this polling service, we can say the max amount of options is 10. Any more and we will throw an error.
 
-Now we can implement this error. Head to the `src/errors.rs` file. It should currently look like:
+Now we can implement this error. Head to the `src/errors.rs` file. It should currently look like this:
 
 ```rust
 use cosmwasm_std::StdError;
@@ -107,7 +107,7 @@ pub enum ContractError {
 
 It contains some basic errors already, the ability to construct an error from a Cosmwasm `StdError` and a base `Unauthorized` error.
 
-Lets add our new error, call it something clear. I'm going with `TooManyOptions`. Now let's discuss the `#[error("...")]` part above each error. This is what the errors string value will be, it allows support of custom arguments but for now we can simply hard code our string to something like `"Too many poll options"`. This is what our new `ContractError` enum will look like:
+Let's add our new error, call it something clear. I'm going with `TooManyOptions`. Now let's discuss the `#[error("...")]` part above each error. This is what the errors string value will be, it allows support of custom arguments but for now, we can simply hard code our string to something like `"Too many poll options"`. This is what our new `ContractError` enum will look like:
 
 ```rust
 use cosmwasm_std::StdError;
@@ -184,7 +184,7 @@ It then adds a tuple of `(option, 0)` to the back of the new mutable `Vec`.
 
 This means we now have our options in the correct format.
 
-Let's construct our `Poll` but firstly we need to import the struct and the `Map` in storage. This can be seen below:
+Let's construct our `Poll` but firstly we need to import the struct and the `Map` into storage. This can be seen below:
 
 ```rust
 // We can add it to our existing config imports
@@ -223,7 +223,7 @@ fn execute_create_poll(
 
 As hinted above it uses `info.sender` for the creator. It simply uses the `question` parameter with no further processing for its question. And it uses our newly created `opts` `Vec` for the options.
 
-So how do we use this? Well firstly we need to store it under a key, in our case `poll_id`. We also need to give it a value to store, in our case `poll`. It also requires `deps.storage` to store values for our contract. So putting this all together how does this look?
+So how do we use this? Well, firstly we need to store it under a key, in our case `poll_id`. We also need to give it a value to store, in our case `poll`. It also requires `deps.storage` to store values for our contract. So putting this all together how does this look?
 
 ```rust
 fn execute_create_poll(
@@ -255,9 +255,9 @@ fn execute_create_poll(
 }
 ```
 
-Remember we need to pass it a reference of our `poll` by prefixing it with the `&` character. What this function call effectively does is it takes our `deps.storage` and stores `poll` under the key `poll_id`. The suffixing `?` means it automatically unwraps the result throwing any errors, this is standard practice for storage as if it fails here we definitely want to tell the user.
+Remember we need to pass it a reference of our `poll` by prefixing it with the `&` character. What this function call effectively does is it takes our `deps.storage` and stores `poll` under the key `poll_id`. The suffixing `?` means it automatically unwraps the result throwing any errors, this is standard practice for storage as if it fails here we want to tell the user.
 
-And now we need to remove that pesky `unimplemented!`, lets just return a response similarly to how we did in `instantiate`.
+And now we need to remove that pesky `unimplemented!` so let's just return a response similar to how we did in `instantiate`.
 
 ```rust
 fn execute_create_poll(
@@ -289,12 +289,12 @@ fn execute_create_poll(
 }
 ```
 
-Looks very familiar doesn't it! But there we go, we have now created an endpoint to store our polls in storage.
+Looks very familiar, doesn't it? But there we go, we have now created an endpoint to store our polls in storage.
 
-In the next part we will cover the `Vote` execute endpoint.
+In the next part, we will cover the `Vote` execute endpoint.
 
 ## Follow Up Exercises
 
-1. Think about what attributes we could add to our response?
+1. Think about what attributes we could add to our response.
     - Hints
         - What information do you think would be useful to the user?

@@ -1,6 +1,6 @@
 # Part Two - Environment Setup
 
-So you think you’re ready to start! Now we need to setup our development environment. First things first, text editors. I’ll rattle a few off for those that skipped ahead.
+So you think you’re ready to start? Now we need to set up our development environment. First things first, text editors. I’ll rattle a few off for those that skipped ahead.
 
 1. IntelliJ with Rust Plugin - [Setup Guide](https://www.youtube.com/watch?v=H_-L7sjLcH8)
 1. VSCode - [Setup Guide](https://www.youtube.com/watch?v=aYsUBddY7KY)
@@ -11,7 +11,7 @@ So we have our trusty text editor, it’s time for us to generate some boilerpla
 
 ## Ensuring Rustup is Installed
 
-Firstly we're going to need to ensure rustup is setup. To do this run the following commands in your terminal:
+Firstly we're going to need to ensure rustup is set up. To do this run the following commands in your terminal:
 
 ```bash
 rustup default stable
@@ -56,7 +56,7 @@ Using an older or a different branch:
 cargo generate --git https://github.com/CosmWasm/cw-template.git --branch <BRANCH_NAME> --name <PROJECT_NAME>
 ```
 
-For compatibility I am going to use an older version using the branch flag. This means if you are following along (you should be) we will be using the same package versions.
+For compatibility, I am going to use an older version using the branch flag. This means if you are following along (you should be) we will be using the same package versions.
 
 The version I will be using is `1.0-minimal`. This version has minimal boilerplate so we won't have to delete much, although it isn't the latest version. So run the command:
 
@@ -121,7 +121,7 @@ Once complete the output should look something like the following:
 ✨   Done! New project created /Path/To/Whereever/cosmwasm-zero-to-hero/02 - Environment Setup/code/cw-starter
 ```
 
-Let's verify it's all setup correctly by running some commands:
+Let's verify it's all set up correctly by running some commands:
 
 ```bash
 # Change directory to root directory of the contract
@@ -135,6 +135,6 @@ cargo schema
 cargo wasm
 ```
 
-We are now setup, so open this folder in your preferred text editor and we'll move on to the next section!
+We are now set up, so open this folder in your preferred text editor and we'll move on to the next section!
 
 The code for this section is available under the `code` directory. This will be standard for chapters going forward.

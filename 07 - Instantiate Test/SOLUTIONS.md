@@ -1,6 +1,6 @@
 # Follow Up Exercises Solutions
 
-So you attempted the follow up exercises, I'm going to give solutions in snippet format.
+So you attempted the follow-up exercises, I'm going to give solutions in snippet format.
 
 ## Exercise 1
 

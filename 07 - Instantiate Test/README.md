@@ -1,12 +1,12 @@
 # Part Seven - Instantiate Test
 
-Alright now we have implemented instantiating our contract let's get to testing it!
+Alright, now we have implemented instantiating our contract let's get to testing it!
 
-Unit tests are vital to smart contract development, every developer should be implementing tests and striving to maximise test coverage. This can be achieved by both Unit-tests and integration tests.
+Unit tests are vital to smart contract development, every developer should be implementing tests and striving to maximize test coverage. This can be achieved by both Unit-tests and integration tests.
 
-We'll cover both in this series but for now let's get to unit testing.
+We'll cover both in this series but for now, let's get to unit testing.
 
-So let's look at our `contract.rs` file, at the bottom there should be something that looks like:
+So let's look at our `contract.rs` file, at the bottom, there should be something that looks like this:
 
 ```rust
 #[cfg(test)]
@@ -32,7 +32,7 @@ mod tests {
 }
 ```
 
-Just to touch on the topic of mocking, mocking is faking values for the sake of testing. For example `mock_dependencies` can fake the value needed for the `DepsMut` type for our `instantiate` call.
+Just to touch on the topic of mocking, mocking is faking values for the sake of testing. For example, `mock_dependencies` can fake the value needed for the `DepsMut` type for our `instantiate` call.
 
 The two global address variables we will use when mocking info, for this case setting admin correctly.
 
@@ -99,7 +99,7 @@ mod tests {
 }
 ```
 
-Alright those next two parts should seem somewhat familiar! The first part is the `InstantiateMsg` we wrote. In this case we provide `None` as the admin meaning the sender (`ADDR1`) will be the admin.
+Alright those next two parts should seem somewhat familiar! The first part is the `InstantiateMsg` we wrote. In this case, we provide `None` as the admin meaning the sender (`ADDR1`) will be the admin.
 
 The part after that is simply calling our `instantiate` function and capturing the response. We unwrap the `Result` wrapper to assert success as we expect it to succeed.
 
@@ -107,15 +107,15 @@ That leaves the `res` variable with type `Response` we created the response with
 
 So we expect this `res` variable to have two attributes, one of which is simply `("action", "instantiate")` and the other we expect to be `("admin", "ADDR1")` as we provided `None` for the admin in our instantiate message.
 
-If only there was a way we could `assert` that this was `equal` to what we expect.
+If only there was a way we could `assert` that this was `equal` to what we expected.
 
 Can you see where I am getting at?
 
-If not that's fine, enter `assert_eq!`. `assert_eq!` is a macro used in testing to assert two values are the same. It will panic otherwise and fail the test.
+If not that's fine, enter `assert_eq`, `assert_eq!` is a macro used in testing to assert two values are the same. It will panic otherwise and fail the test.
 
-Now let's show you how to use it. A `Response` object has a member variable which is a vector of attributes (`Vec<Attribute>`). In our case this can be accessed by using `res.attributes`. Now we want to assert that this is equal to another vector of attributes.
+Now let's show you how to use it. A `Response` object has a member variable which is a vector of attributes (`Vec<Attribute>`). In our case, this can be accessed by using `res.attributes`. Now we want to assert that this is equal to another vector of attributes.
 
-Alright enough text let's just show you how.
+Alright, enough text let's just show you how.
 
 ```rust
 #[cfg(test)]
@@ -144,11 +144,11 @@ mod tests {
 }
 ```
 
-Alright so the first part makes sense right! So we want to assert two values are equal, one of these values is `res.attributes` (the first parameter). The other is a vector which we have hardcoded, as we expect the values to be equal. (Note: `vec![]` is a handy macro to make vectors inline). Also the `attr` function is simply a helper function that creates an `Attribute` struct for you. It's call signature is as follows `attr(key, value)`.
+Alright so the first part makes sense right? So we want to assert two values are equal, one of these values is `res.attributes` (the first parameter). The other is a vector that we have hardcoded, as we expect the values to be equal. (Note: `vec![]` is a handy macro to make vectors inline). Also, the `attr` function is simply a helper function that creates an `Attribute` struct for you. Its call signature is as follows `attr(key, value)`.
 
-So now let's run `cargo test`, you should be met by the 1 test passing again. However we now know this test does something!
+So now let's run `cargo test`, you should be met by the 1 test passing again. However, we now know this test does something!
 
-Alright some of you more eagle-eyed readers may have noticed our test does not cover the other scenario with our `InstantiateMsg`. This leads me on to our next section:
+Alright, some of you more eagle-eyed readers may have noticed our test does not cover the other scenario with our `InstantiateMsg`. This leads me on to our next section:
 
 ## Follow Up Exercises
 
@@ -160,4 +160,4 @@ Alright now we're getting into this, I'm going to set some follow-up exercises f
         - You should use `ADDR2` as your specified admin.
         - How is our `assert_eq!` call going to be different?
 
-That's it for this part, as always thanks for reading all!
+That's it for this part, as always thanks for reading it all!

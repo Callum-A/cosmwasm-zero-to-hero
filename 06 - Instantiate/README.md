@@ -4,13 +4,13 @@ Firstly I mentioned how I broke the build last time! Let's fix that.
 
 ## Spring Cleaning
 
-So how did I break the build? Well we renamed the `STATE` variable to `CONFIG` and this `STATE` variable is imported in `examples/schema.rs`.
+So how did I break the build? Well, we renamed the `STATE` variable to `CONFIG` and this `STATE` variable is imported in `examples/schema.rs`.
 
 It no longer exists so Rust throws an error!
 
-Let's got to `examples/schema.rs` and fix this.
+Let's go to `examples/schema.rs` and fix this.
 
-To fix simply find the line that looks like:
+To fix simply find the line that looks like this:
 
 ```rust
 use cw_starter::state::State;
@@ -81,9 +81,9 @@ cargo wasm
 
 ## Instantiating a Contract
 
-When contracts are stored on chain they must be instantiated. I cover storing contracts on chain in a later section.
+When contracts are stored on the chain they must be instantiated. I cover storing contracts on a chain in a later section.
 
-Instantiating a contract is like creating an object in other languages, however it is achieved by a special message.
+Instantiating a contract is like creating an object in other languages, however, it is achieved by a special message.
 
 This message is an `InstantiateMsg` located under `src/msg.rs`.
 
@@ -91,15 +91,15 @@ Let's add something to it!
 
 ### The InstantiateMsg
 
-What if when a user instantiates the contract, they can specify an admin but if they do not it defaults to them.
+What if when a user instantiates the contract, they can specify an admin but if they do not it defaults to them?
 
-How can we achieve this in Rust? Enter the `Option` structure. For example: `Option<String>` can either be a String or null.
+How can we achieve this in Rust? Enter the `Option` structure. For example `Option<`String>` can either be a String or null.
 
 This is perfect for our use case! You may wonder why we do not use `Option<Addr>` this is due to validation, we want to check what the user is passing us is a valid address. I will show you how to do this in code.
 
-Firstly lets add this option to our `InstantiateMsg`.
+Firstly let's add this option to our `InstantiateMsg`.
 
-Currently our `InstantiateMsg` looks like:
+Currently, our `InstantiateMsg`` looks like this:
 
 ```rust
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
@@ -146,9 +146,9 @@ pub fn instantiate(
 // Following code omitted
 ```
 
-We're going to correct this now and actually implement it! Currently it simply throws an error saying it's not implemented.
+We're going to correct this now and implement it! Currently, it simply throws an error saying it's not implemented.
 
-To start with lets use a standard called `cw2`, cw2 allows contracts to store a version and name. (The commented out parts).
+To start with let's use a standard called `cw2`, cw2 allows contracts to store a version and name. (The commented-out parts).
 
 Firstly let's uncomment those:
 
@@ -170,7 +170,7 @@ pub fn instantiate(
 // Following code omitted
 ```
 
-Now let's store them using `cw2`, first we have to import a helper function `set_contract_version`:
+Now let's store them using `cw2`, first, we have to import a helper function `set_contract_version`:
 
 ```rust
 // Previous code omitted
@@ -199,17 +199,17 @@ pub fn instantiate(
 As we have modified the instantiate arguments, now's an ideal time to talk through them:
 
 -   `deps` - The dependencies, this contains your contract storage, the ability to query other contracts and balances, and some API functionality.
--   `env` - The environment, this contains contract information such as its address, block information such as current height and time, as well as some optional transaction info.
+-   `env` - The environment, contains contract information such as its address, block information such as current height and time, as well as some optional transaction info.
 -   `info` - Message metadata, contains the sender of the message (`Addr`) and the funds sent with it a `Vec<Coin>`.
 -   `msg` - The `InstantiateMsg` you define in `src/msg.rs`.
 
-So we set some contract metadata but we still haven't implemented any logic. Alright let's create our `Config` struct and store it. Make sure you import the struct itself and the storage:
+So we set some contract metadata but we still haven't implemented any logic. Alright, let's create our `Config` struct and store it. Make sure you import the struct itself and the storage:
 
 ```rust
 use crate::state::{Config, CONFIG};
 ```
 
-Alright we're ready to set our `Config` firstly lets use this instantiate message to work out who our admin is going to be. We can do that using:
+Alright, we're ready to set our `Config` firstly let's use this instantiate message to work out who our admin is going to be. We can do that using:
 
 ```rust
 // Previous code omitted
@@ -234,22 +234,22 @@ pub fn instantiate(
 // Following code omitted
 ```
 
-Alright that's a lot of code. Let's talk you through it step by step.
+Alright, that's a lot of code. Let's talk you through it step by step.
 
 So the first two lines after `set_contract_version` unwrap our `Option` field and if it is `null` sets it to `info.sender.to_string()` which is the message sender's address as a string.
 
 Rust features a lot of unwrapping of errors and providing defaults, so I recommend you understand this pattern.
 
-In this case if we gave it `null` in our instantiate as the admin, it would be set to the sender. Otherwise it would use whatever value we passed it.
+In this case, if we gave it `null` in our instantiate as the admin, it would be set to the sender. Otherwise, it would use whatever value we passed it.
 
-It then validates the address by passing it as a `&str` to the `deps.api.addr_validate()` function. This validates if an address is valid and throws an error otherwise. We handle this error by proceeding the call with a `?` this automatically unwraps and throws the error if one is given. This means an `Invalid Address` error will be thrown back to the user if they provide an invalid one.
+It then validates the address by passing it as a `&str` to the `deps.api.addr_validate()` function. This validates if an address is valid and throws an error otherwise. We handle this error by proceeding with the call with a `?` this automatically unwraps and throws the error if one is given. This means an `Invalid Address` error will be thrown back to the user if they provide an invalid one.
 
 The next line creates a `Config` struct with our now validated admin address as the admin. We have to clone the validated address to avoid moving values.
 
-The line following that stores it in our `CONFIG` storage. (Ensure you have imported `CONFIG` from `state.rs`). It does this by calling it with `deps.storage` which is our contracts storage and giving it the address of our newly created config variable. It does this by preceeding it with the `&` character.
+The line following that stores it in our `CONFIG` storage. (Ensure you have imported `CONFIG` from `state.rs`). It does this by calling it with `deps.storage` which is our contracts storage and giving it the address of our newly created config variable. It does this by preceding it with the `&` character.
 
 The final line is our return line indicated by no `;`. This returns a success using the `Ok` and `Result` structure.
 
-Within the `Ok` structure we create a response using various builder methods. We add two attributes, which for simple understanding are similar to HTTP headers. Get into a habit of writing good attributes as they help a lot with providing metadata to a front end. In this case we add two, one of which tells the user what 'endpoint' they called and the other tells the user who the admin of the contract is.
+Within the `Ok` structure, we create a response using various builder methods. We add two attributes, which for simple understanding are similar to HTTP headers. Get into a habit of writing good attributes as they help a lot with providing metadata to the front end. In this case, we add two, one of which tells the user what 'endpoint' they called and the other tells the user who the admin of the contract is.
 
-We have implemented our first entry point of our contract! In the next section we will implement tests for it! Tests are vital for smart contracts.
+We have implemented the first entry point of our contract! In the next section, we will implement tests for it! Tests are vital for smart contracts.
