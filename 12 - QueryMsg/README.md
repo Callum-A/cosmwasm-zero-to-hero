@@ -1,21 +1,21 @@
 # Part Twelve - QueryMsg
 
 So you're asking, we can change the state of our contract but what if we want to read some details?
-We don't need to pay transaction fees on that do we?
+We don't need to pay transaction fees on that, do we?
 
-No my friend, this is what querying is for!
+No, my friend, this is what querying is for!
 
-So as we did with all other sections lets head to where it starts `src/msg.rs`.
+So as we did with all other sections let's head to where it starts `src/msg.rs`.
 
 Now there should be a type of message that looks very empty and stands out, if you read the title of this chapter.
 
 QueryMsg allows us to query our contract's state, so let's think of some use cases we want for our eventual frontend dApp.
 
 1. Query all polls in a list format.
-2. Query a singular poll for a detail view.
-3. Query a user's vote for a given a poll.
+2. Query a singular poll for a detailed view.
+3. Query a user's vote for a given poll.
 
-These are vital for our functionality. Without them our website would suck and not work.
+These are vital for our functionality. Without them, our website would suck and not work.
 
 So like I did with the other message types. Let's think of what we need.
 
@@ -23,11 +23,11 @@ So for querying all polls, we don't particularly need anything. If we wanted to 
 
 For querying one all we need is the `poll_id` as that's the key of our map.
 
-For querying a user's vote we need a user's address and the `poll_id` of the poll as this is the key for our ballots map. I'll add the caviat here that due to this being a query we no longer have the `info` variable to determine the sender so the user's address must be contained in the message!
+For querying a user's vote we need a user's address and the `poll_id` of the poll as this is the key for our ballots map. I'll add the caveat here that due to this being a query we no longer have the `info` variable to determine the sender so the user's address must be contained in the message!
 
-Seems simple enough? Lets get to it.
+Seems simple enough? Let's get to it.
 
-Writing a QueryMsg is in fact the exact same as writing an ExecuteMsg, you'll pick this up in no time.
+Writing a QueryMsg is the same as writing an ExecuteMsg, you'll pick this up in no time.
 
 Starting with the simplest, `AllPolls` as it has no parameters. This is what it looks like:
 
@@ -81,7 +81,7 @@ pub enum QueryMsg {
 // Following code omitted
 ```
 
-We had to remove `QueryMsg::CustomMsg` in this enum, this has broken a helper in the `src/helpers.rs` file we need to remove, we can simply delete all code location in that file.
+We had to remove `QueryMsg::CustomMsg` in this enum, this has broken a helper in the `src/helpers.rs` file we need to remove, we can simply delete all code locations in that file.
 
 We can also remove the following code in `src/msg.rs` as it will not be used:
 
@@ -100,13 +100,13 @@ We also need to correct `examples/schema.rs` by changing the import from `src/ms
 use cw_starter::msg::{ExecuteMsg, InstantiateMsg, QueryMsg};
 ```
 
-Also remove the schema export for it:
+Also, remove the schema export for it:
 
 ```rust
 export_schema(&schema_for!(CustomResponse), &out_dir);
 ```
 
-There's our three messages, this should cover the basic functionality for this tutorial. Feel free to add your own routes, with smart contract development the world is your oyster.
+There are our three messages, this should cover the basic functionality of this tutorial. Feel free to add your routes, with smart contract development the world is your oyster.
 
 ## Follow Up Exercises
 
@@ -117,4 +117,4 @@ There's our three messages, this should cover the basic functionality for this t
 2. What might we have to do if we want to get all votes for a user?
     - Hints
         - This is pretty advanced, you may have to go dipping into the Cosmwasm docs or some advanced projects. I'd recommend looking at `cw3-dao` in the `dao-contracts` repo. [Repo](https://github.com/DA0-DA0/dao-contracts/tree/main/contracts/cw3-dao).
-        - If only there was a way to PREFIX query a map with a composite key? (Hint: I'm not being subtle here)
+        - If only there was a way to PREFIX query a map with a composite key. (Hint: I'm not being subtle here)

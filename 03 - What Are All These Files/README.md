@@ -1,6 +1,6 @@
 # Part Three - What Are All These Files
 
-So we now have our contract open in our preferred editor. Let's talk the file structure.
+So we now have our contract open in our preferred editor. Let's talk about the file structure.
 
 ```bash
 cw-starter/ # Root

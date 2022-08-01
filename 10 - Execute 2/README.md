@@ -1,6 +1,6 @@
 # Part Ten - Execute 2
 
-Alright so last time we implemented the `execute_create_poll` function. Now we are going to do the same for voting.
+So last time we implemented the `execute_create_poll` function. Now we are going to do the same for voting.
 
 So open up `src/contract.rs` and take a look. Your main `execute` call should look something like this:
 
@@ -25,7 +25,7 @@ pub fn execute(
 
 So I explained my structure in the last chapter, let's write the code for calling the `execute_vote` function. We'll pass all parameters such as `deps`, `env`, `info` as well as our `poll_id` and `vote`.
 
-This should look something like:
+This should look something like this:
 
 ```rust
 #[cfg_attr(not(feature = "library"), entry_point)]
@@ -62,11 +62,11 @@ fn execute_vote(
 // Following code omitted
 ```
 
-This should all feel familiar, it's why I'm no longer explaining it so in depth. You should start to pick up these patterns very quickly.
+This should all feel familiar, it's why I'm no longer explaining it so in-depth. You should start to pick up these patterns very quickly.
 
 Alright this function is more complex so let's take it slow and think of what we need to do:
 
-1. We need to a load a poll, check if it exists.
+1. We need to load a poll and check if it exists.
 2. We need to update a user's ballot and if they have already voted take one away from their old vote option.
 3. We need to increment the user's new vote option.
 4. We need to save the poll's new state as well as the ballot.
@@ -90,7 +90,7 @@ fn execute_vote(
 // Following code omitted
 ```
 
-We have to clone the `poll_id` as we plan to use it multiple times. I'll go over how we can optimise this in a later chapter.
+We have to clone the `poll_id` as we plan to use it multiple times. I'll go over how we can optimize this in a later chapter.
 
 Do you remember the match case we used? We can also use this over `Option` to cater for both states, `null` or a `Poll` value.
 
@@ -117,7 +117,7 @@ fn execute_vote(
 
 As you can see if a poll exists (the `Some` branch) we take that poll and store it in a now mutable `poll` variable, which will we use later.
 
-If a poll does not exist we simply error, for now I placed a placeholder `Unauthorized` error.
+If a poll does not exist we simply error, for now, I placed a placeholder `Unauthorized` error.
 
 So what is the next step, let's deal with the user's ballot and if it already exists. This is going to get complex so I'll show you it and talk you through it step by step.
 
@@ -176,23 +176,23 @@ fn execute_vote(
 So firstly we call update on the `BALLOTS` storage `Map`, we use `deps.storage` as standard and we create the composite key we defined in `src/state.rs`. We then define an action that will be called on the matching key.
 You can think of this action as an inline function or a lambda.
 
-This action takes in both scenarios where a ballot exists and where on does not. We need to handle both.
+This action takes in both scenarios where a ballot exists and where one does not. We need to handle both.
 
 So we use another trusty match case! The `Some` option is where a ballot already exists and is more complex as we need to decrement their old vote by one. We'll talk through this first.
 
-How I handle decrementing their vote count is by finding the position of it by using the old ballot (now contained in the `ballot` variable). To do this we use another action in the `position` function, `position` simply returns an `Option<usize>` of the position in the `Vec` or `None` if it is not. We conditionally return the position where `option.0 == ballot.option`. The first part (`option.0`) effectively translates to the first element of the options tuple we defined (`(String, u64)`) so we want to match it with whatever ballot was casted before. This will find us the index the vote count is stored in.
+How I handle decrementing their vote count is by finding the position of it by using the old ballot (now contained in the `ballot` variable). To do this we use another action in the `position` function, `position` simply returns an `Option<usize>` of the position in the `Vec` or `None` if it is not. We conditionally return the position where `option.0 == ballot.option`. The first part (`option.0`) effectively translates to the first element of the options tuple we defined (`(String, u64)`) so we want to match it with whatever ballot was cast before. This will find us the index the vote count is stored in.
 
 We simply unwrap the `Option` value it returns to assert success.
 
 The next line simply uses this index, now stored in `position_of_old_vote` to decrement the count by 1. The `.1` part means it is accessing the second part of the tuple (the `u64` part).
 
-We then simply want to return a new `Ballot` for the key to be set to, we do this by defining a new `Ballot` with the user specified vote and returning it using the `Ok` syntax to assert success.
+We then simply want to return a new `Ballot` for the key to be set to, we do this by defining a new `Ballot` with the user-specified vote and returning it using the `Ok` syntax to assert success.
 
 The other part is much simpler, if a user has not voted before, we can simply create their new ballot as we do not have to worry about their old vote.
 
 I promise this is as complex as it gets!
 
-So now we need to increment the count of their new vote by 1, some of you may have realised we can use the same pattern we use to decrement their old vote. Let me show you:
+So now we need to increment the count of their new vote by 1, some of you may have realized we can use the same pattern we use to decrement their old vote. Let me show you:
 
 ```rust
 // Previous code omitted
@@ -322,9 +322,9 @@ And that means you made it to the end of another chapter!
 
 ## Follow Up Exercises
 
-1. Implement a better error for if a poll does not exist. Call it `PollNotFound`
+1. Implement a better error if a poll does not exist. Call it `PollNotFound`
     - Hints
-        - Go back a chapter and check how we implemented the limit for options.
+        - Go back a single chapter and check how we implemented the limit for options.
 2. Add better attributes on the `Ok` call, this will help with testing in the next chapter
     - Hints
         - What would be useful to the user?
