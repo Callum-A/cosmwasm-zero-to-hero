@@ -91,15 +91,15 @@ Let's add something to it!
 
 ### The InstantiateMsg
 
-What if when a user instantiates the contract, they can specify an admin but if they do not it defaults to them?
+When a user instantiates the contract, they can either specify an admin or leave it empty. 
 
-How can we achieve this in Rust? Enter the `Option` structure. For example `Option<`String>` can either be a String or null.
+How can we achieve this in Rust? Use the `Option` structure. For example `Option<String>` can either be a String or null.
 
-This is perfect for our use case! You may wonder why we do not use `Option<Addr>` this is due to validation, we want to check what the user is passing us is a valid address. I will show you how to do this in code.
+This is perfect for our use case! You may wonder why we do not use `Option<Addr>`. This is due to validation; we want to check what the user is passing us is a valid address. I will show you how to do this in code.
 
 Firstly let's add this option to our `InstantiateMsg`.
 
-Currently, our `InstantiateMsg`` looks like this:
+Currently, our `InstantiateMsg` looks like this:
 
 ```rust
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
@@ -123,7 +123,7 @@ Now let's use this in our contract!
 
 ### Instantiation
 
-Alright let's open `src/contract.rs`, this is where the magic happens.
+Alright, let's open `src/contract.rs`, this is where the magic happens.
 
 Towards the top you should see something like:
 
@@ -148,7 +148,7 @@ pub fn instantiate(
 
 We're going to correct this now and implement it! Currently, it simply throws an error saying it's not implemented.
 
-To start with let's use a standard called `cw2`, cw2 allows contracts to store a version and name. (The commented-out parts).
+To start with, let's use a standard called `cw2`, it allows contracts to store version and name as you look at the commented-out code lines.
 
 Firstly let's uncomment those:
 
