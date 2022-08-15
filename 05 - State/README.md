@@ -147,7 +147,7 @@ use cw_storage_plus::{Item, Map};
 
 Now we import both `Item` and `Map` from `cw-storage-plus`.
 
-So how do we define a `Map`` that we can use in our contract? Let's place it below our config `Item`.
+So how do we define a `Map` that we can use in our contract? Let's place it below our config `Item`.
 
 ```rust
 // Previous code omitted
