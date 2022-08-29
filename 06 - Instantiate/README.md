@@ -91,15 +91,15 @@ Let's add something to it!
 
 ### The InstantiateMsg
 
-What if when a user instantiates the contract, they can specify an admin but if they do not it defaults to them?
+When a user instantiates the contract, they can either specify an admin or leave it empty. 
 
-How can we achieve this in Rust? Enter the `Option` structure. For example `Option<`String>` can either be a String or null.
+How can we achieve this in Rust? Use the `Option` structure. For example `Option<String>` can either be a String or null.
 
-This is perfect for our use case! You may wonder why we do not use `Option<Addr>` this is due to validation, we want to check what the user is passing us is a valid address. I will show you how to do this in code.
+This is perfect for our use case! You may wonder why we do not use `Option<Addr>`. This is due to validation; we want to check what the user is passing us is a valid address. I will show you how to do this in code.
 
 Firstly let's add this option to our `InstantiateMsg`.
 
-Currently, our `InstantiateMsg`` looks like this:
+Currently, our `InstantiateMsg` looks like this:
 
 ```rust
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
@@ -123,7 +123,7 @@ Now let's use this in our contract!
 
 ### Instantiation
 
-Alright let's open `src/contract.rs`, this is where the magic happens.
+Alright, let's open `src/contract.rs`, this is where the magic happens.
 
 Towards the top you should see something like:
 
@@ -148,7 +148,7 @@ pub fn instantiate(
 
 We're going to correct this now and implement it! Currently, it simply throws an error saying it's not implemented.
 
-To start with let's use a standard called `cw2`, cw2 allows contracts to store a version and name. (The commented-out parts).
+To start with, let's use a standard called `cw2`, it allows contracts to store version and name as you look at the commented-out code lines.
 
 Firstly let's uncomment those:
 
@@ -170,7 +170,7 @@ pub fn instantiate(
 // Following code omitted
 ```
 
-Now let's store them using `cw2`, first, we have to import a helper function `set_contract_version`:
+Now let's store them using `cw2`. First, we have to import a helper function `set_contract_version`:
 
 ```rust
 // Previous code omitted
@@ -209,7 +209,7 @@ So we set some contract metadata but we still haven't implemented any logic. Alr
 use crate::state::{Config, CONFIG};
 ```
 
-Alright, we're ready to set our `Config` firstly let's use this instantiate message to work out who our admin is going to be. We can do that using:
+Alright, we're ready to set our `Config`. Let's first use this instantiate message to work out who our admin is going to be. We can implement the logic by writing the following codes:
 
 ```rust
 // Previous code omitted
@@ -242,14 +242,14 @@ Rust features a lot of unwrapping of errors and providing defaults, so I recomme
 
 In this case, if we gave it `null` in our instantiate as the admin, it would be set to the sender. Otherwise, it would use whatever value we passed it.
 
-It then validates the address by passing it as a `&str` to the `deps.api.addr_validate()` function. This validates if an address is valid and throws an error otherwise. We handle this error by proceeding with the call with a `?` this automatically unwraps and throws the error if one is given. This means an `Invalid Address` error will be thrown back to the user if they provide an invalid one.
+It then validates the address by passing it as a `&str` to the `deps.api.addr_validate()` function. This validates if an address is valid and throws an error otherwise. We handle this error by proceeding with the call with a `?`. This automatically unwraps and throws the error if one is given. This means an `Invalid Address` error will be thrown back to the user if they provide an invalid one.
 
-The next line creates a `Config` struct with our now validated admin address as the admin. We have to clone the validated address to avoid moving values.
+The next line creates a `Config` struct with our validated admin address as the admin. We have to clone the validated address to avoid moving values.
 
 The line following that stores it in our `CONFIG` storage. (Ensure you have imported `CONFIG` from `state.rs`). It does this by calling it with `deps.storage` which is our contracts storage and giving it the address of our newly created config variable. It does this by preceding it with the `&` character.
 
 The final line is our return line indicated by no `;`. This returns a success using the `Ok` and `Result` structure.
 
-Within the `Ok` structure, we create a response using various builder methods. We add two attributes, which for simple understanding are similar to HTTP headers. Get into a habit of writing good attributes as they help a lot with providing metadata to the front end. In this case, we add two, one of which tells the user what 'endpoint' they called and the other tells the user who the admin of the contract is.
+Within the `Ok` structure, we create a response using various builder methods. We add two attributes. To simply put, they are similar to HTTP headers. Get into a habit of writing good attributes as they help a lot with providing metadata to the front end. In this case, we add two, one of which tells the user what 'endpoint' they called and the other tells the user who the admin of the contract is.
 
 We have implemented the first entry point of our contract! In the next section, we will implement tests for it! Tests are vital for smart contracts.

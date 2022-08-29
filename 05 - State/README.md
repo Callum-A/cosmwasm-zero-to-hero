@@ -147,7 +147,7 @@ use cw_storage_plus::{Item, Map};
 
 Now we import both `Item` and `Map` from `cw-storage-plus`.
 
-So how do we define a `Map`` that we can use in our contract? Let's place it below our config `Item`.
+So how do we define a `Map` that we can use in our contract? Let's place it below our config `Item`.
 
 ```rust
 // Previous code omitted
@@ -178,6 +178,8 @@ pub const BALLOTS: Map<(Addr, String), Ballot> = Map::new("ballots");
 
 Right we have finished coding for this one! Hopefully, you learned how to write custom structs and how to store them in storage.
 
-Disclaimer! If you currently run any command such as `cargo test` or `cargo wasm` the build will break! Don't worry this is expected as we have modified our storage code without changing code on the contract side.
+**Disclaimer!** 
+
+If you currently run any command such as `cargo test` or `cargo wasm` the build will break! Don't worry this is expected as we have modified our storage code without changing code on the contract side.
 
 We'll fix this next time.
