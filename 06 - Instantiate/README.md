@@ -42,7 +42,7 @@ Let's also generate a schema for our `Poll` and `Ballot` structs.
 
 Firstly let's import them.
 
-Modify the line we just correct from:
+Modify the line we just corrected from:
 
 ```rust
 use cw_starter::state::Config;
