@@ -250,6 +250,6 @@ The line following that stores it in our `CONFIG` storage. (Ensure you have impo
 
 The final line is our return line indicated by no `;`. This returns a success using the `Ok` and `Result` structure.
 
-Within the `Ok` structure, we create a response using various builder methods. We add two attributes. To simply put, they are similar to HTTP headers. Get into a habit of writing good attributes as they help a lot with providing metadata to the front end. In this case, we add two, one of which tells the user what 'endpoint' they called and the other tells the user who the admin of the contract is.
+Within the `Ok` structure, we create a response using various builder methods. We add two attributes. To put it simply, they are similar to HTTP headers. Get into a habit of writing good attributes as they help a lot with providing metadata to the front end. In this case, we add two, one of which tells the user what 'endpoint' they called and the other tells the user who the admin of the contract is.
 
 We have implemented the first entry point of our contract! In the next section, we will implement tests for it! Tests are vital for smart contracts.
