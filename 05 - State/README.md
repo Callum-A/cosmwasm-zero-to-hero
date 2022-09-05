@@ -127,7 +127,7 @@ So we have defined our structs, but we still do not store them. As explained ear
 
 We achieve this by using a `Map`, this interface is provided by `cw-storage-plus` and allows storage of values with keys. If you are unfamiliar with a `Map` data structure I recommend you do some reading on it.
 
-So how do these maps work? Well firstly we need to define one, so let's talk through logic. Each poll is going to need a unique identifier to act as the key, for simplicities sake we are going to use a UUID that can be generated client side. This will be a `String` key.
+So how do these maps work? Well firstly we need to define one, so let's talk through logic. Each poll is going to need a unique identifier to act as the key, for simplicity's sake we are going to use a UUID that can be generated client side. This will be a `String` key.
 
 So how do we define it?
 

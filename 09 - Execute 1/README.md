@@ -45,7 +45,7 @@ And then the `=>` means it calls the function, in our case we simply use the `un
 
 So let's start writing our first implementation. So I like to follow the following pattern for my `execute` and `query` messages. The entry point is `execute` but each message calls its function often named after the message. For example for `CreatePoll` the function name would be `execute_create_poll` now at a glance I can tell that this function executes the create a poll message.
 
-I also like the pass all the `deps`, `env`, and `info` variables to each execute function, as I may need them for logic within the body, for example accessing storage.
+I also like to pass all the `deps`, `env`, and `info` variables to each execute function, as I may need them for logic within the body, for example accessing storage.
 
 We also need the relevant information, for our `CreatePoll` example, this is the `poll_id`, `question` and `options`. So this is how our `execute` body is now going to look:
 
