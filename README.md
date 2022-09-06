@@ -1,4 +1,5 @@
 # Cosmwasm Zero to Hero
+## The Cosmwasm Tutorial
 
 Hey there, this intends to be a guide on writing your first Cosmwasm contract.
 
