@@ -12,7 +12,7 @@ So let's just quickly walk through the scenarios we want to test:
 4. Successful voting a poll we have already voted for.
 5. Unsuccessful voting a poll, (invalid option).
 
-That sound's like a lot to test! It's not I'm going to split it into several test functions.
+That sounds like a lot to test! It's not. I'm going to split it into several test functions.
 
 1. `test_execute_create_poll_valid` - tests the valid creation of a poll. AKA we expect no errors.
 2. `test_execute_create_poll_invalid` - tests the invalid creation of a poll. AKA we expect errors.
