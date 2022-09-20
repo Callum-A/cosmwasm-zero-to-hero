@@ -126,7 +126,7 @@ pub enum ContractError {
 }
 ```
 
-Alright with that added it's time to head back to `src/contract.rs` and implement it. What we need to do is check the options `Vec` length, and IF it is over 10, return an error. How we achieve this with `Result` is by using `Err()` and contained within `Err` will be our new `ContractError` here is how that looks:
+Alright with that added it's time to head back to `src/contract.rs` and implement it. What we need to do is check the options `Vec` length, and IF it is over 10, return an error. How we achieve this with `Result` is by using `Err()` and contained within `Err` will be our new `ContractError`. Here is how that looks:
 
 ```rust
 fn execute_create_poll(
@@ -144,7 +144,7 @@ fn execute_create_poll(
 }
 ```
 
-We've now performed some basic validation, we can now begin constructing our `Poll`. If you remember correctly we store options on our `Poll` as a `Vec<(String, u64)>` whereas we only pass options as a `Vec<String>` as all votes start at 0.
+Now that we've performed some basic validation, we can begin constructing our `Poll`. If you remember correctly we store options on our `Poll` as a `Vec<(String, u64)>` whereas we only pass options as a `Vec<String>` as all votes start at 0.
 
 So we need to construct a new `Vec` before we can create a poll.
 

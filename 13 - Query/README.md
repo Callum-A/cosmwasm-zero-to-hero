@@ -23,7 +23,7 @@ pub struct AllPollsResponse {
 
 Make sure both the struct AND the polls member variable are marked as public via the `pub` keyword.
 
-The derivations support serializing too and from `Binary`.
+The derivations support serializing to and from `Binary`.
 
 So we've done one let's think about our next one. `Poll` lets us pick one poll but a poll may not exist. The `Option` wrapper is perfect for this and deserializes nicely to `null` in JSON for our frontend later.
 
