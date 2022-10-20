@@ -116,5 +116,5 @@ There are our three messages, this should cover the basic functionality of this 
         - Remember our config is stored in the `Item` variable `CONFIG`.
 2. What might we have to do if we want to get all votes for a user?
     - Hints
-        - This is pretty advanced, you may have to go dipping into the Cosmwasm docs or some advanced projects. I'd recommend looking at `cw3-dao` in the `dao-contracts` repo. [Repo](https://github.com/DA0-DA0/dao-contracts/tree/main/contracts/cw3-dao).
+        - This is pretty advanced, you may have to go dipping into the Cosmwasm docs or some advanced projects. I'd recommend looking at `cw3-dao` in the `dao-contracts` repo. [Repo](https://github.com/DA0-DA0/dao-contracts/tree/0a2e80cb3eb96dbee04c0771d6ed878f00e56a20/legacy/cw3-dao).
         - If only there was a way to PREFIX query a map with a composite key. (Hint: I'm not being subtle here)
