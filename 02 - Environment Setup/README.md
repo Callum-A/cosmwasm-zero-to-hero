@@ -61,7 +61,7 @@ For compatibility, I am going to use an older version using the branch flag. Thi
 The version I will be using is `1.0-minimal`. This version has minimal boilerplate so we won't have to delete much, although it isn't the latest version. So run the command:
 
 ```bash
-cargo generate --git https://github.com/CosmWasm/cw-template.git --name PROJECT_NAME -d minimal=true
+cargo generate --git https://github.com/CosmWasm/cw-template.git --name cw-starter -d minimal=true
 ```
 
 Once complete the output should look something like the following:
