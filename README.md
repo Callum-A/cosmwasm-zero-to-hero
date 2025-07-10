@@ -1,4 +1,9 @@
 # Cosmwasm Zero to Hero
+
+# Important Notice
+
+This repository has now been archived and is no longer maintained. It has likely fallen massively out of date. I am keeping it here as it may be some use and this repository is important to me.
+
 ## The Cosmwasm Tutorial
 
 Hey there, this intends to be a guide on writing your first Cosmwasm contract.
